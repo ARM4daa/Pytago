@@ -71,6 +71,6 @@ static struct PyModuleDef pytagomodule = {
 };
 
 
-PyMODINIT_FUNC PyInit_pentago(void) {
-    return PyModule_Create(&pentagomodule);
+PyMODINIT_FUNC PyInit_pytago_core(void) {
+    return PyModule_Create(&pytagomodule);
 };
