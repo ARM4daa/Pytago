@@ -4,21 +4,17 @@ from kivy.uix.label import Label
 from player import Player
 
 class Board:
-    def __init__(self, pos, size, rotate, selfmain):
-        self.update_move = tuple()
+    def __init__(self, pos, size, apply_move, selfmain):
+        self.move = [0, 0, 0]
         self.button1 = None
         self.button2 = None
         self.boards = (
-            SubBoard(size, pos[0],          pos[1] + size, selfmain, 0, rotate, 300, 475, self.update_move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2), 
-            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, selfmain, 1, rotate, 550, 475, self.update_move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2),
-            SubBoard(size, pos[0],          pos[1],        selfmain, 2, rotate, 300, 225, self.update_move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2),
-            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, rotate, 550, 225, self.update_move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2)
+            SubBoard(size, pos[0],          pos[1] + size, selfmain, 0, apply_move, 300, 475, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2), 
+            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, selfmain, 1, apply_move, 550, 475, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2),
+            SubBoard(size, pos[0],          pos[1],        selfmain, 2, apply_move, 300, 225, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2),
+            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, apply_move, 550, 225, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2)
         )
         self.layout = selfmain
-
-
-    def update_move(self, id_board, index_box, sens):
-        self.update_move = (id_board, index_box, sens)
 
     def able_board(self):
         for elt in self.boards:

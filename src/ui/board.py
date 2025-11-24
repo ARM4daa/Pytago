@@ -16,7 +16,7 @@ class SubBoard:
         self.board.bind(on_press = lambda x: self.print_button_rotate(x))           
 
         self.id_board = id_board                        #Id of the board object
-        self.handler_rotate = main_rotate               #Rotate function for bitboard
+        self.apply_move = main_rotate               #Rotate function for bitboard
         self.button1 = main_button1                     #First rotation button (left)
         self.button2 = main_button2                     #Second rotation button (right)
         self.move = move                                #Tuple containing the information transmitted to the bitboard  
@@ -122,11 +122,13 @@ class SubBoard:
         #Displays the updated board  
         self.print_box()
 
-        #Used to turn management
-        Player.player = (Player.player + 1) % 2                 #Move to the oser player
-        self.move = (self.id_board, 1)                          #Modify value for the bitboard
+        #Used for turn management
+        Player.player = (Player.player + 1) % 2                 #Move to the other player
+        self.move[1:3] = [self.id_board, 1]                          #Modify value for the bitboard
         self.disable_all_boards()                               #Deactivates the boards
-        self.able_all_boxes()                                   #Activates the squares 
+        self.able_all_boxes()
+        
+        self.apply_move()                                       #Activates the squares 
 
     def rotate_left(self, instance):
         """
@@ -153,9 +155,11 @@ class SubBoard:
 
         #Used to turn management
         Player.player = (Player.player + 1) % 2                 #Move to the oser player
-        self.move = (self.id_board, 0)                          #Modify value for the bitboard
+        self.move[1:3] = [self.id_board, 0]                         #Modify value for the bitboard
         self.disable_all_boards()                               #Deactivates the boards
-        self.able_all_boxes()                                   #Activates the squares 
+        self.able_all_boxes()
+        
+        self.apply_move()                                   #Activates the squares 
 
     def clear_board(self):
         """ Clear the board """
