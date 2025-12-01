@@ -34,22 +34,30 @@ class LoginScreen(FloatLayout):
         self.board.able_board()
         self.board.able_box()
 
-    
-    def win(self, instance):
-        """ Function to test winning animation """
-        if self.win_p:
-            self.board.win_party()
-
     def reset(self, instance):
         """ Reset the game """
         self.board.reset_board()
-    
+        self.bitboard_me = 0
+        self.bitboard_opp = 0
+        
     def apply_move(self):
         """ Rotate function for bitboard """
-        print(self.board.move)
+        self.bitboard_me = core.place_marble(self.bitboard_me, self.board.move[0])
+        if core.is_won(self.bitboard_me):
+            self.board.win_party()
+        else:
+            if self.board.move[2]:
+                core.rotate_board_clockwise(self.bitboard_me, self.board.move[1])
+                core.rotate_board_clockwise(self.bitboard_opp, self.board.move[1])
+            else:
+                core.rotate_board_aclockwise(self.bitboard_me, self.board.move[1])
+                core.rotate_board_aclockwise(self.bitboard_opp, self.board.move[1])
+            self.bitboard_me, self.bitboard_opp = self.bitboard_opp, self.bitboard_me
 
     def mainloop(self):
-        self.bitboards = [0,0,0]
+        self.bitboard_me = 0
+        self.bitboard_opp = 0
+        self.single_player = False
 
 
 class MyApp(App):

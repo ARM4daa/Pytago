@@ -2,7 +2,7 @@ from player import Player
 from kivy.uix.button import Button
 
 class Box():
-    def __init__(self, pos_xy, disable_all_boxes, able_all_boards, id_board, id_box):
+    def __init__(self, pos_xy, disable_all_boxes, able_all_boards, id_board, id_box, move):
         """
         Doc
         """
@@ -15,6 +15,7 @@ class Box():
             size_hint = (None, None), 
             background_color = (1, 1, 1, 0), 
             disabled = True
+            
         )
         self.box.bind(on_press = lambda x: self.play(x))
 
@@ -22,7 +23,21 @@ class Box():
         self.disable_all_boxes = disable_all_boxes              
         self.able_all_boards = able_all_boards  
 
-        self.id_box = (id_board, id_box)            #Identity of the box on the main board   
+        self.id_box = (id_box, id_board)            #Identity of the box on the main board   
+        self.move = move
+
+        values = {0: 8,
+         1: 4,
+         2: 7,
+         3: 1,
+         4: 0,
+         5: 3,
+         6: 5,
+         7: 2,
+         8: 6}
+        
+        self.value = 2 ** (values[self.id_box[0]] + (3 - self.id_box[1])*9)
+
     
     def play(self, instance):
         """
@@ -44,5 +59,4 @@ class Box():
         self.disable_all_boxes()
         self.able_all_boards()
 
-        #Return value to modify bitboard
-        return self.id_box
+        self.move[0] = self.value

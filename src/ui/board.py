@@ -16,7 +16,7 @@ class SubBoard:
         self.board.bind(on_press = lambda x: self.print_button_rotate(x))           
 
         self.id_board = id_board                        #Id of the board object
-        self.apply_move = main_rotate               #Rotate function for bitboard
+        self.apply_move = main_rotate                   #Rotate function for bitboard
         self.button1 = main_button1                     #First rotation button (left)
         self.button2 = main_button2                     #Second rotation button (right)
         self.move = move                                #Tuple containing the information transmitted to the bitboard  
@@ -29,7 +29,7 @@ class SubBoard:
         self.box = []
         for i in range(3):            
             for j in range(3):    
-                self.box.append(Box([x_first_box + i*75, y_first_box - j*75], self.disable_all_boxes, self.able_all_boards, self.id_board, i*3 + j))
+                self.box.append(Box([x_first_box + i*75, y_first_box - j*75], self.disable_all_boxes, self.able_all_boards, self.id_board, j*3 + i, move))
         
 
         #Print board then boxe
@@ -72,7 +72,6 @@ class SubBoard:
         Print the button to rotate a board
         """
         if self.button1 is not None:
-            print("Yep")
             self.layout_ajout.remove_widget(self.button1)
             self.layout_ajout.remove_widget(self.button2)
 
@@ -124,7 +123,7 @@ class SubBoard:
 
         #Used for turn management
         Player.player = (Player.player + 1) % 2                 #Move to the other player
-        self.move[1:3] = [self.id_board, 1]                          #Modify value for the bitboard
+        self.move[1:3] = [self.id_board, 1]                     #Modify value for the bitboard
         self.disable_all_boards()                               #Deactivates the boards
         self.able_all_boxes()
         
@@ -155,11 +154,11 @@ class SubBoard:
 
         #Used to turn management
         Player.player = (Player.player + 1) % 2                 #Move to the oser player
-        self.move[1:3] = [self.id_board, 0]                         #Modify value for the bitboard
+        self.move[1:3] = [self.id_board, 0]                     #Modify value for the bitboard
         self.disable_all_boards()                               #Deactivates the boards
         self.able_all_boxes()
         
-        self.apply_move()                                   #Activates the squares 
+        self.apply_move()                                       #Activates the squares 
 
     def clear_board(self):
         """ Clear the board """
@@ -168,7 +167,3 @@ class SubBoard:
             for j in range(3):
                 self.box[i*3 + j].box.background_color = [1, 1, 1, 1]
                 self.box[i*3 + j].box.disabled = True
-
-    def win(self):
-        "Animation when a player win"
-        pass
