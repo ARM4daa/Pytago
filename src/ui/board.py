@@ -1,5 +1,6 @@
-from board import SubBoard
+from subboard import SubBoard
 from kivy.uix.button import Button
+from kivy.uix.label import Label
 from kivy.uix.label import Label
 from player import Player
 
@@ -24,7 +25,12 @@ class Board:
         for elt in self.boards:
             elt.disable_board()
     
+        for elt in self.boards:
+            elt.disable_board()
+    
     def disable_box(self):
+        for elt in self.boards:
+            elt.disable_box()
         for elt in self.boards:
             elt.disable_box()
     
@@ -37,6 +43,16 @@ class Board:
             self.boards[i].disable_board()
             self.boards[i].disable_box()
             self.boards[i].clear_board()
+            
+    def disable_rotate_button(self):
+        for elt in self.boards:
+            elt.button1.disabled = True
+            elt.button2.disabled = True
+    
+    def able_rotate_button(self):
+        for elt in self.boards:
+            elt.button1.disabled = False
+            elt.button2.disabled = False
 
     def print_button_rotate(self, btn):
         button1 = Button(text="Gauche", size_hint=(None, None), size=(50, 50), pos = (0, 0))
@@ -44,7 +60,17 @@ class Board:
 
         button1.bind(on_press = lambda x: SubBoard.rotate_left(x))
         button2.bind(on_press = lambda x: SubBoard.rotate_right(x))
+        button1 = Button(text="Gauche", size_hint=(None, None), size=(50, 50), pos = (0, 0))
+        button2 = Button(text="Droite", size_hint=(None, None), size=(50, 50), pos = (0, 0))
 
+        button1.bind(on_press = lambda x: SubBoard.rotate_left(x))
+        button2.bind(on_press = lambda x: SubBoard.rotate_right(x))
+
+        self.layout.add_widget(button1)
+        self.layout.add_widget(button2)
+    
+    def win_party(self):
+        self.layout.add_widget(Label(text = f"Player {Player.player} wiiiiiiiiiiiiiiiin ! "))
         self.layout.add_widget(button1)
         self.layout.add_widget(button2)
     

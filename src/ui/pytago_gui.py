@@ -1,7 +1,7 @@
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
-from main_board import Board
+from board import Board
 
 class LoginScreen(FloatLayout):
     def __init__(self, **kwargs):
@@ -15,7 +15,7 @@ class LoginScreen(FloatLayout):
         
         self.board = Board([275, 50], 250, rotate, self)
 
-        mode_solo.bind(on_press = lambda x: self.run_party(x))
+        mode_duo.bind(on_press = lambda x: self.run_game(x))
         reset_game.bind(on_press = lambda x: self.reset(x))
         button_test_win.bind(on_press = lambda x: self.win(x))
         self.win_p = True
@@ -26,7 +26,7 @@ class LoginScreen(FloatLayout):
         self.add_widget(rules)
         self.add_widget(button_test_win)   
     
-    def run_party(self, instance):
+    def run_game(self, instance):
         self.win_p = True
         self.board.able_board()
         self.board.able_box()
