@@ -1,9 +1,9 @@
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
-from main_board import Board
+from board import Board
 import pytago_core as core
-import pytago_ai as ai
+"import pytago_ai as ai"
 
 class LoginScreen(FloatLayout):
     def __init__(self, **kwargs):
