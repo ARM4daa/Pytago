@@ -1,0 +1,21 @@
+Help on module pytago:
+
+NNAAMMEE
+    pytago - High-speed Pytago core
+
+FFUUNNCCTTIIOONNSS
+    iiss__wwoonn(...)
+        Check if a board is a winning state
+    
+    ppllaaccee__mmaarrbbllee(...)
+        Place a marble on the board
+    
+    rroottaattee__bbooaarrdd__aacclloocckkwwiissee(...)
+        Rotate board at index i aclockwise
+    
+    rroottaattee__bbooaarrdd__cclloocckkwwiissee(...)
+        Rotate board at index i clockwise
+
+FFIILLEE
+    /home/bapt/Bureau/Pytago/pytago/src/ui/pytago_core.cpython-311-x86_64-linux-gnu.so
+

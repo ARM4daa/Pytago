@@ -3,6 +3,7 @@ from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 from main_board import Board
 import pytago_core as core
+import pytago_ai as ai
 
 class LoginScreen(FloatLayout):
     def __init__(self, **kwargs):
@@ -14,7 +15,7 @@ class LoginScreen(FloatLayout):
         rules = Button(text="Règles", pos = [30, 25], size_hint = [None, None], size = [200, 50], background_normal = "fond_test.PNG")
         button_test_win = Button(text="Fausse victoire", pos = [30, 100], size_hint = [None, None], size = [200, 50], background_normal = "fond_test.PNG")
         
-        self.board = Board([275, 50], 250, self.apply_move, self)
+        self.board = Board([275, 50], 250, self.play, self)
 
         mode_solo.bind(on_press = lambda x: self.run_party(x))
         reset_game.bind(on_press = lambda x: self.reset(x))
@@ -27,7 +28,11 @@ class LoginScreen(FloatLayout):
         self.add_widget(rules)
         self.add_widget(button_test_win)
 
-        self.mainloop()
+        self.bitboard_me = 0
+        self.bitboard_opp = 0
+        self.single_player = False
+        self.ai_to_play = False
+        self.level = 1
     
     def run_party(self, instance):
         self.win_p = True
@@ -39,26 +44,30 @@ class LoginScreen(FloatLayout):
         self.board.reset_board()
         self.bitboard_me = 0
         self.bitboard_opp = 0
-        
-    def apply_move(self):
-        """ Rotate function for bitboard """
-        self.bitboard_me = core.place_marble(self.bitboard_me, self.board.move[0])
+
+    def apply_move(self, move):
+        self.bitboard_me = core.place_marble(self.bitboard_me, move[0])
         if core.is_won(self.bitboard_me):
             self.board.win_party()
         else:
             if self.board.move[2]:
-                core.rotate_board_clockwise(self.bitboard_me, self.board.move[1])
-                core.rotate_board_clockwise(self.bitboard_opp, self.board.move[1])
+                core.rotate_board_clockwise(self.bitboard_me, move[1])
+                core.rotate_board_clockwise(self.bitboard_opp, move[1])
             else:
-                core.rotate_board_aclockwise(self.bitboard_me, self.board.move[1])
-                core.rotate_board_aclockwise(self.bitboard_opp, self.board.move[1])
+                core.rotate_board_aclockwise(self.bitboard_me, move[1])
+                core.rotate_board_aclockwise(self.bitboard_opp, move[1])
             self.bitboard_me, self.bitboard_opp = self.bitboard_opp, self.bitboard_me
-
-    def mainloop(self):
-        self.bitboard_me = 0
-        self.bitboard_opp = 0
-        self.single_player = False
-
+        
+    def play(self):
+        if self.single_player:
+            if self.ai_to_play:
+                best = ai.get_best_move(self.bitboard_me, self.bitboard_opp, self.level)
+                self.apply_move(best)
+            else:
+                self.apply_move(self.board.move)
+            self.ai_to_play = not self.ai_to_play
+        else:
+            self.apply_move(self.board.move)
 
 class MyApp(App):
     def build(self):
