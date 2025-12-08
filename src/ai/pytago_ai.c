@@ -41,7 +41,7 @@ static inline int evaluate(uint64_t board_me, uint64_t board_opp) {
 
 
 
-int negamax(uint64_t me, uint64_t opp, int depth){
+int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
     int score = 0;
     int best;
     uint64_t child_me, child_opp;
@@ -64,8 +64,15 @@ int negamax(uint64_t me, uint64_t opp, int depth){
                     child_opp = rotate_board_aclockwise(opp, i);
                 
                 }
-                score = -negamax(child_opp, child_me, depth-1);
+                score = -negamax(child_opp, child_me, depth-1, -alpha, -beta);
+                if (score >= beta){ 
+                    return score; 
+                }
                 best = fmax(best, score);
+                alpha = fmax(alpha, score);
+                if (alpha >= beta){
+                    break;
+                }
             }
         }
         m <<= 1;
@@ -91,7 +98,7 @@ struct move get_next_move(uint64_t me, uint64_t opp, int depth){
                     child_me = rotate_board_aclockwise(child_me, i);
                     child_opp = rotate_board_aclockwise(opp, i);
                 }
-                score = -negamax(child_opp, child_me, depth-1);
+                score = -negamax(child_opp, child_me, depth-1, -10000, 10000);
 
                 if (score > best){
                     best = score;
@@ -105,4 +112,3 @@ struct move get_next_move(uint64_t me, uint64_t opp, int depth){
     }
     return best_move;
 }
-
