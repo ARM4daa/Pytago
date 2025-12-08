@@ -1,169 +1,52 @@
+from board import SubBoard
 from kivy.uix.button import Button
+from kivy.uix.label import Label
 from player import Player
-from box import Box
 
-class SubBoard:
-    def __init__(self, board_size, pos_x, pos_y, layout, id_board, main_rotate, x_first_box, y_first_box, move, disable_box, able_box, disable_board, able_board, main_button1, main_button2):
-        """
-        Doc
-        """
-        self.board_size = board_size
-        self.pos_x = pos_x                              #Position x of the board on the layout
-        self.pos_y = pos_y                              #Position y of the board on the layout
-        self.layout_ajout = layout                      #Layout where elements are added
-
-        self.board = Button(pos=[self.pos_x, self.pos_y], size=[self.board_size, self.board_size], size_hint=[None, None], disabled = True, background_normal = "board_wood.PNG", background_disabled_normal = "board_wood.PNG")
-        self.board.bind(on_press = lambda x: self.print_button_rotate(x))           
-
-        self.id_board = id_board                        #Id of the board object
-        self.apply_move = main_rotate                   #Rotate function for bitboard
-        self.button1 = main_button1                     #First rotation button (left)
-        self.button2 = main_button2                     #Second rotation button (right)
-        self.move = move                                #Tuple containing the information transmitted to the bitboard  
-        self.disable_all_boxes = disable_box            #Function associate to any buttons making turn
-        self.able_all_boxes = able_box                  #Function associate to rotation
-        self.disable_all_boards= disable_board          #Function associate to any buttons making turn
-        self.able_all_boards = able_board               #Function associate to rotation
-        
-        #Create all the boxes's board
-        self.box = []
-        for i in range(3):            
-            for j in range(3):    
-                self.box.append(Box([x_first_box + i*75, y_first_box - j*75], self.disable_all_boxes, self.able_all_boards, self.id_board, j*3 + i, move))
-        
-
-        #Print board then boxe
-        layout.add_widget(self.board)
-        self.print_box()
-
-
-    def print_box(self):
-        """ Displays the status of the 9 boxes on the board """
-        for i in range(3):            
-            for j in range(3):    
-                self.layout_ajout.remove_widget(self.box[i*3 + j].box)        
-                self.layout_ajout.add_widget(self.box[i*3+ j].box)
-
-
-    def disable_board(self):
-        """ Disable the board """
-        self.board.disabled = True
+class Board:
+    def __init__(self, pos, size, apply_move, selfmain):
+        self.move = [0, 0, 0]
+        self.button1 = None
+        self.button2 = None
+        self.boards = (
+            SubBoard(size, pos[0],          pos[1] + size, selfmain, 0, apply_move, 300, 475, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2), 
+            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, selfmain, 1, apply_move, 550, 475, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2),
+            SubBoard(size, pos[0],          pos[1],        selfmain, 2, apply_move, 300, 225, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2),
+            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, apply_move, 550, 225, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.button1, self.button2)
+        )
+        self.layout = selfmain
 
     def able_board(self):
-        """ Able the board """
-        self.board.disabled = False
-
-
+        for elt in self.boards:
+            elt.able_board()
+    
+    def disable_board(self):
+        for elt in self.boards:
+            elt.disable_board()
+    
     def disable_box(self):
-        """ Disable 9 boxes of the board """
-        for i in range(3):
-            for j in range(3):
-                self.box[i*3 + j].box.disabled = True
+        for elt in self.boards:
+            elt.disable_box()
     
     def able_box(self):
-        """ Able 9 boxes of the board """
-        for i in range(3):
-            for j in range(3):
-                self.box[i*3 + j].box.disabled = False
+        for elt in self.boards:
+            elt.able_box()
 
+    def reset_board(self):
+        for i in range(4):
+            self.boards[i].disable_board()
+            self.boards[i].disable_box()
+            self.boards[i].clear_board()
 
     def print_button_rotate(self, btn):
-        """
-        Print the button to rotate a board
-        """
-        if self.button1 is not None:
-            self.layout_ajout.remove_widget(self.button1)
-            self.layout_ajout.remove_widget(self.button2)
+        button1 = Button(text="Gauche", size_hint=(None, None), size=(50, 50), pos = (0, 0))
+        button2 = Button(text="Droite", size_hint=(None, None), size=(50, 50), pos = (0, 0))
 
-        self.button1 = Button(text="Gauche", size_hint=(None, None), size=(50, 50))
-        self.button2 = Button(text="Droite", size_hint=(None, None), size=(50, 50))
+        button1.bind(on_press = lambda x: SubBoard.rotate_left(x))
+        button2.bind(on_press = lambda x: SubBoard.rotate_right(x))
 
-        if self.id_board == 0:
-            self.button1.pos = (self.pos_x - 50, self.pos_y + 200)
-            self.button2.pos = (self.pos_x, self.pos_y + 250)
-        elif self.id_board == 1:
-            self.button1.pos = (self.pos_x + self.board_size - 50, self.pos_y + 250)
-            self.button2.pos = (self.pos_x + self.board_size, self.pos_y + 200)
-        elif self.id_board == 2:
-            self.button1.pos = (self.pos_x - 50, self.pos_y)
-            self.button2.pos = (self.pos_x, self.pos_y -50)
-        else:
-            self.button1.pos = (self.pos_x + self.board_size - 50, self.pos_y - 50)
-            self.button2.pos = (self.pos_x + self.board_size, self.pos_y)
-
-        self.button1.bind(on_press = lambda x: self.rotate_left(x))
-        self.button2.bind(on_press = lambda x: self.rotate_right(x))
-
-        self.layout_ajout.add_widget(self.button1)
-        self.layout_ajout.add_widget(self.button2)
+        self.layout.add_widget(button1)
+        self.layout.add_widget(button2)
     
-
-    def rotate_right(self, instance):
-        """
-        Doc
-        """
-        #Permutation of the values of the corners of the board 
-        temp = [self.box[0].free, self.box[0].box.background_color]
-
-        self.box[0].free, self.box[0].box.background_color = self.box[2].free, self.box[2].box.background_color
-        self.box[2].free, self.box[2].box.background_color = self.box[8].free, self.box[8].box.background_color
-        self.box[8].free, self.box[8].box.background_color = self.box[6].free, self.box[6].box.background_color
-        self.box[6].free, self.box[6].box.background_color = temp
-
-        #Permutation of the values of the sides of the board 
-        temp = [self.box[1].free, self.box[1].box.background_color]
-        
-        self.box[1].free, self.box[1].box.background_color = self.box[5].free, self.box[5].box.background_color
-        self.box[5].free, self.box[5].box.background_color = self.box[7].free, self.box[7].box.background_color
-        self.box[7].free, self.box[7].box.background_color = self.box[3].free, self.box[3].box.background_color
-        self.box[3].free, self.box[3].box.background_color = temp
-
-        #Displays the updated board  
-        self.print_box()
-
-        #Used for turn management
-        Player.player = (Player.player + 1) % 2                 #Move to the other player
-        self.move[1:3] = [self.id_board, 1]                     #Modify value for the bitboard
-        self.disable_all_boards()                               #Deactivates the boards
-        self.able_all_boxes()
-        
-        self.apply_move()                                       #Activates the squares 
-
-    def rotate_left(self, instance):
-        """
-        Doc
-        """
-        #Permutation of the values of the corners of the board 
-        temp = [self.box[0].free, self.box[0].box.background_color]
-
-        self.box[0].free, self.box[0].box.background_color = self.box[6].free, self.box[6].box.background_color
-        self.box[6].free, self.box[6].box.background_color = self.box[8].free, self.box[8].box.background_color
-        self.box[8].free, self.box[8].box.background_color = self.box[2].free, self.box[2].box.background_color
-        self.box[2].free, self.box[2].box.background_color = temp
-
-        #Permutation of the values of the sides of the board
-        temp = [self.box[1].free, self.box[1].box.background_color]
-        
-        self.box[1].free, self.box[1].box.background_color = self.box[3].free, self.box[3].box.background_color
-        self.box[3].free, self.box[3].box.background_color = self.box[7].free, self.box[7].box.background_color
-        self.box[7].free, self.box[7].box.background_color = self.box[5].free, self.box[5].box.background_color
-        self.box[5].free, self.box[5].box.background_color = temp
-
-        #Displays the updated board 
-        self.print_box()
-
-        #Used to turn management
-        Player.player = (Player.player + 1) % 2                 #Move to the oser player
-        self.move[1:3] = [self.id_board, 0]                     #Modify value for the bitboard
-        self.disable_all_boards()                               #Deactivates the boards
-        self.able_all_boxes()
-        
-        self.apply_move()                                       #Activates the squares 
-
-    def clear_board(self):
-        """ Clear the board """
-        self.board.disabled = True
-        for i in range(3):
-            for j in range(3):
-                self.box[i*3 + j].box.background_color = [1, 1, 1, 1]
-                self.box[i*3 + j].box.disabled = True
+    def win_party(self):
+        self.layout.add_widget(Label(text = f"Player {Player.player} wiiiiiiiiiiiiiiiin ! "))
