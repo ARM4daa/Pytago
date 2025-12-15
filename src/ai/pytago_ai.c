@@ -53,7 +53,7 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
     uint64_t m = 1;
     while (m != 68719476736) {
         for (int i = 0; i < 4; i++){
-            uint64_t child_me = me | m;
+            child_me = me | m;
             
             child_me = rotate_board_aclockwise(child_me, i);
             child_opp = rotate_board_aclockwise(opp, i);
