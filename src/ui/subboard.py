@@ -108,20 +108,20 @@ class SubBoard:
         Doc
         """
         #Permutation of the values of the corners of the board 
-        temp = [self.box[0].free, self.box[0].box.background_color]
+        temp = [self.box[0].free, self.box[0].box.background_normal,self.box[0].box.background_disabled_normal]
 
-        self.box[0].free, self.box[0].box.background_color = self.box[2].free, self.box[2].box.background_color
-        self.box[2].free, self.box[2].box.background_color = self.box[8].free, self.box[8].box.background_color
-        self.box[8].free, self.box[8].box.background_color = self.box[6].free, self.box[6].box.background_color
-        self.box[6].free, self.box[6].box.background_color = temp
+        self.box[0].free, self.box[0].box.background_normal,self.box[0].box.background_disabled_normal = self.box[2].free, self.box[2].box.background_normal,self.box[2].box.background_disabled_normal
+        self.box[2].free, self.box[2].box.background_normal,self.box[2].box.background_disabled_normal = self.box[8].free, self.box[8].box.background_normal,self.box[8].box.background_disabled_normal
+        self.box[8].free, self.box[8].box.background_normal,self.box[8].box.background_disabled_normal = self.box[6].free, self.box[6].box.background_normal,self.box[6].box.background_disabled_normal
+        self.box[6].free, self.box[6].box.background_normal,self.box[6].box.background_disabled_normal = temp
 
         #Permutation of the values of the sides of the board 
-        temp = [self.box[1].free, self.box[1].box.background_color]
+        temp = [self.box[1].free, self.box[1].box.background_normal,self.box[1].box.background_disabled_normal]
         
-        self.box[1].free, self.box[1].box.background_color = self.box[5].free, self.box[5].box.background_color
-        self.box[5].free, self.box[5].box.background_color = self.box[7].free, self.box[7].box.background_color
-        self.box[7].free, self.box[7].box.background_color = self.box[3].free, self.box[3].box.background_color
-        self.box[3].free, self.box[3].box.background_color = temp
+        self.box[1].free, self.box[1].box.background_normal,self.box[1].box.background_disabled_normal = self.box[5].free, self.box[5].box.background_normal,self.box[5].box.background_disabled_normal
+        self.box[5].free, self.box[5].box.background_normal,self.box[5].box.background_disabled_normal = self.box[7].free, self.box[7].box.background_normal,self.box[7].box.background_disabled_normal
+        self.box[7].free, self.box[7].box.background_normal,self.box[7].box.background_disabled_normal = self.box[3].free, self.box[3].box.background_normal,self.box[3].box.background_disabled_normal
+        self.box[3].free, self.box[3].box.background_normal,self.box[3].box.background_disabled_normal = temp
 
         #Displays the updated board  
         self.print_box()
@@ -138,20 +138,20 @@ class SubBoard:
         Doc
         """
         #Permutation of the values of the corners of the board 
-        temp = [self.box[0].free, self.box[0].box.background_color]
+        temp = [self.box[0].free, self.box[0].box.background_normal,self.box[0].box.background_disabled_normal]
 
-        self.box[0].free, self.box[0].box.background_color = self.box[6].free, self.box[6].box.background_color
-        self.box[6].free, self.box[6].box.background_color = self.box[8].free, self.box[8].box.background_color
-        self.box[8].free, self.box[8].box.background_color = self.box[2].free, self.box[2].box.background_color
-        self.box[2].free, self.box[2].box.background_color = temp
+        self.box[0].free, self.box[0].box.background_normal,self.box[0].box.background_disabled_normal = self.box[6].free, self.box[6].box.background_normal,self.box[6].box.background_disabled_normal
+        self.box[6].free, self.box[6].box.background_normal,self.box[6].box.background_disabled_normal = self.box[8].free, self.box[8].box.background_normal,self.box[8].box.background_disabled_normal
+        self.box[8].free, self.box[8].box.background_normal,self.box[8].box.background_disabled_normal = self.box[2].free, self.box[2].box.background_normal,self.box[2].box.background_disabled_normal
+        self.box[2].free, self.box[2].box.background_normal,self.box[2].box.background_disabled_normal = temp
 
         #Permutation of the values of the sides of the board
-        temp = [self.box[1].free, self.box[1].box.background_color]
+        temp = [self.box[1].free, self.box[1].box.background_normal,self.box[1].box.background_disabled_normal]
         
-        self.box[1].free, self.box[1].box.background_color = self.box[3].free, self.box[3].box.background_color
-        self.box[3].free, self.box[3].box.background_color = self.box[7].free, self.box[7].box.background_color
-        self.box[7].free, self.box[7].box.background_color = self.box[5].free, self.box[5].box.background_color
-        self.box[5].free, self.box[5].box.background_color = temp
+        self.box[1].free, self.box[1].box.background_normal,self.box[1].box.background_disabled_normal = self.box[3].free, self.box[3].box.background_normal,self.box[3].box.background_disabled_normal
+        self.box[3].free, self.box[3].box.background_normal,self.box[3].box.background_disabled_normal = self.box[7].free, self.box[7].box.background_normal,self.box[7].box.background_disabled_normal
+        self.box[7].free, self.box[7].box.background_normal,self.box[7].box.background_disabled_normal = self.box[5].free, self.box[5].box.background_normal,self.box[5].box.background_disabled_normal
+        self.box[5].free, self.box[5].box.background_normal,self.box[5].box.background_disabled_normal = temp
 
         #Displays the updated board 
         self.print_box()
@@ -169,9 +169,8 @@ class SubBoard:
             for j in range(3):
                 self.box[i*3 + j].disabled = True
                 self.box[i*3 + j].free = True
-                self.box[i*3 + j].box.background_color = (1, 1, 1, 0)
-                print(self.box[i*3 + j].box.background_color)
-
+                self.box[i*3 + j].box.background_normal = "test_placement.jpeg"
+                self.box[i*3 + j].box.background_disabled_normal = "test_placement.jpeg"
     def win(self):
         "Animation when a player win"
         pass
