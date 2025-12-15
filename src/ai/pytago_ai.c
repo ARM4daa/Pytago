@@ -1,19 +1,18 @@
 #include <stdint.h>
 #include <stdio.h>
-#include <math.h>
 #include "core.h"
 #include "masks.h"
+#include "pytago_ai.h"
 
 
-struct move {
-    uint64_t pos;
-    int quadrant;
-    int clockwise;
-};
+static const int puissance_of_5[6] = {1, 5, 25, 125, 625, 3125};
+
 
 static inline int nb_bit(uint64_t board) {
     return __builtin_popcountll(board);
 }
+
+
 
 static inline int evaluate(uint64_t board_me, uint64_t board_opp) {
     int score_me = 0;
@@ -24,7 +23,7 @@ static inline int evaluate(uint64_t board_me, uint64_t board_opp) {
         uint64_t mask = WIN_MASKS[i];
         p = nb_bit(board_me & mask);
         if (p != 0) {
-            score_me += (int)pow(5, p);
+            score_me += puissance_of_5[p];
         }
     }
 
@@ -32,7 +31,7 @@ static inline int evaluate(uint64_t board_me, uint64_t board_opp) {
         uint64_t mask = WIN_MASKS[i];
         p = nb_bit(board_opp & mask);
         if (p != 0) {
-            score_opp += (int)pow(5, p);
+            score_opp += puissance_of_5[p];
         }
     }
 
@@ -46,7 +45,7 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
     int best;
     uint64_t child_me, child_opp;
     
-    if (is_won(me) | depth == 0){
+    if (is_won(me) || depth == 0){
         return evaluate(me, opp);
     }
 
@@ -54,33 +53,49 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
     uint64_t m = 1;
     while (m != 68719476736) {
         for (int i = 0; i < 4; i++){
-            for (int c = 0; c < 2; c++) {
-                uint64_t child_me = me | m;
-                if (c){
-                    child_me = rotate_board_clockwise(child_me, i);
-                    child_opp = rotate_board_clockwise(opp, i);
-                }else{
-                    child_me = rotate_board_aclockwise(child_me, i);
-                    child_opp = rotate_board_aclockwise(opp, i);
-                
-                }
-                score = -negamax(child_opp, child_me, depth-1, -alpha, -beta);
-                if (score >= beta){ 
-                    return score; 
-                }
-                best = fmax(best, score);
-                alpha = fmax(alpha, score);
-                if (alpha >= beta){
-                    break;
-                }
+            uint64_t child_me = me | m;
+            
+            child_me = rotate_board_aclockwise(child_me, i);
+            child_opp = rotate_board_aclockwise(opp, i);
+        
+            score = -negamax(child_opp, child_me, depth-1, -alpha, -beta);
+            if (score >= beta){ 
+                return score; 
             }
+            if (score > best){
+                best = score;
+            }
+            if (score > alpha){
+                alpha = score;
+            }
+            if (alpha >= beta){
+                break;
+            }
+            
+            child_me = rotate_board_clockwise(child_me, i);
+            child_opp = rotate_board_clockwise(opp, i);
+            
+            score = -negamax(child_opp, child_me, depth-1, -alpha, -beta);
+            if (score >= beta){ 
+                return score; 
+            }
+            if (score > best){
+                best = score;
+            }
+            if (score > alpha){
+                alpha = score;
+            }
+            if (alpha >= beta){
+                break;
+            }
+
         }
         m <<= 1;
     }
     return best;
 }
 
-struct move get_next_move(uint64_t me, uint64_t opp, int depth){
+struct move get_best_move(uint64_t me, uint64_t opp, int depth){
     int best = -10000;
     int score = 0;
     uint64_t child_me, child_opp;
@@ -89,24 +104,32 @@ struct move get_next_move(uint64_t me, uint64_t opp, int depth){
     uint64_t m = 1;
     while (m != 68719476736) {      // 68719476736 = 2**36
         for (int i = 0; i < 4; i++){
-            for (int c = 0; c < 2; c++) {
-                child_me = me | m;
-                if (c){
-                    child_me = rotate_board_clockwise(child_me, i);
-                    child_opp = rotate_board_clockwise(opp, i);
-                }else{
-                    child_me = rotate_board_aclockwise(child_me, i);
-                    child_opp = rotate_board_aclockwise(opp, i);
-                }
-                score = -negamax(child_opp, child_me, depth-1, -10000, 10000);
+            child_me = me | m;
+        
+            child_me = rotate_board_aclockwise(child_me, i);
+            child_opp = rotate_board_aclockwise(opp, i);
+                
+            score = -negamax(child_opp, child_me, depth-1, -10000, 10000);
 
-                if (score > best){
-                    best = score;
-                    best_move.pos = m;
-                    best_move.quadrant = i;
-                    best_move.clockwise = c;
+            if (score > best){
+                best = score;
+                best_move.pos = m;
+                best_move.quadrant = i;
+                best_move.clockwise = 0;
                 }
+
+            child_me = rotate_board_clockwise(child_me, i);
+            child_opp = rotate_board_clockwise(opp, i);
+            
+            score = -negamax(child_opp, child_me, depth-1, -10000, 10000);
+
+            if (score > best){
+                best = score;
+                best_move.pos = m;
+                best_move.quadrant = i;
+                best_move.clockwise = 1;
             }
+            
         }
         m <<= 1; // multiply by two
     }
