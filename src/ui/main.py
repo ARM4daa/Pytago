@@ -1,8 +1,19 @@
+"""
+@file main.py
+
+@brief Create the link between GUI and bitboards.
+
+@section author_sensors Author(s)
+- Created by Baptiste Farcy
+
+"""
+
+
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 from board import Board
-import pytago_core as core
+"import pytago_core as core"
 "import pytago_ai as ai"
 
 class LoginScreen(FloatLayout):
@@ -35,17 +46,47 @@ class LoginScreen(FloatLayout):
         self.level = 1
     
     def run_party(self, instance):
+
+        """
+        @brief run_party.
+
+        Initialize boards to start the game.
+
+        @param self: object of LoginScreen
+        @param instance: button object
+        @return None
+        """
+
         self.win_p = True
         self.board.able_board()
         self.board.able_box()
 
     def reset(self, instance):
-        """ Reset the game """
+        """
+        @brief reset.
+
+        Reset the board to the initial state to start a new game.
+
+        @param self: object of LoginScreen
+        @param instance: button object
+        @return None
+        """
+
         self.board.reset_board()
         self.bitboard_me = 0
         self.bitboard_opp = 0
 
     def apply_move(self, move):
+        """
+        @brief apply_move.
+
+        apply a move from the GUI to the bitboard associated to a specific player
+
+        @param self: object of LoginScreen
+        @param move: button object
+        @return None
+        """
+
         self.bitboard_me = core.place_marble(self.bitboard_me, move[0])
         if core.is_won(self.bitboard_me):
             self.board.win_party()
@@ -59,6 +100,16 @@ class LoginScreen(FloatLayout):
             self.bitboard_me, self.bitboard_opp = self.bitboard_opp, self.bitboard_me
         
     def play(self):
+        """
+        @brief play.
+
+        The function will control the game and choose the player to play.
+        
+        If you will play in solo mode, the ai is call else you can play with you friend
+
+        @param self: object of LoginScreen
+        @return None
+        """
         if self.single_player:
             if self.ai_to_play:
                 best = ai.get_best_move(self.bitboard_me, self.bitboard_opp, self.level)
