@@ -66,7 +66,8 @@ class SubBoard:
         """ Able 9 boxes of the board """
         for i in range(3):
             for j in range(3):
-                self.box[i*3 + j].box.disabled = False
+                if self.box[i*3 + j].free: 
+                    self.box[i*3 + j].box.disabled = False
 
 
     def print_button_rotate(self, btn):
@@ -166,9 +167,10 @@ class SubBoard:
         """ Clear the board """
         for i in range(3):
             for j in range(3):
-                self.box[i*3 + j].box.disabled = True
-                self.box[i*3 + j].box.free = True
+                self.box[i*3 + j].disabled = True
+                self.box[i*3 + j].free = True
                 self.box[i*3 + j].box.background_color = (1, 1, 1, 0)
+                print(self.box[i*3 + j].box.background_color)
 
     def win(self):
         "Animation when a player win"

@@ -40,9 +40,9 @@ class Box():
             else:
                 self.box.background_color = (0, 1, 0, 1)
         
-        #Gestion of the rest of the turn
-        self.disable_all_boxes()
-        self.able_all_boards()
+            #Gestion of the rest of the turn
+            self.disable_all_boxes()
+            self.able_all_boards()
 
-        #Return value to modify bitboard
-        return self.id_box
+            #Return value to modify bitboard
+            return self.id_box
