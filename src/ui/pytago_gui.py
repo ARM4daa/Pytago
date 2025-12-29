@@ -35,7 +35,7 @@ class LoginScreen(FloatLayout):
     def win(self, instance):
         """ Function to test winning animation """
         if self.win_p:
-            self.board.win_party()
+            self.board.win_game()
 
     def reset(self, instance):
         """ Reset the game """

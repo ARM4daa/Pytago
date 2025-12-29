@@ -5,24 +5,20 @@ from player import Player
 
 class Board:
     def __init__(self, pos, size, rotate, selfmain):
-        self.update_move = tuple()
+        self.move = [0, 0, 0]
         self.button1 = Button(pos=[25, 150], size_hint = [None, None], size = [75, 75])
         self.button2 = Button(pos=[125, 150], size_hint = [None, None], size = [75, 75])
         self.boards = (
-            SubBoard(size, pos[0],          pos[1] + size, selfmain, 0, rotate, 300, 475, self.update_move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2), 
-            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, selfmain, 1, rotate, 550, 475, self.update_move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
-            SubBoard(size, pos[0],          pos[1],        selfmain, 2, rotate, 300, 225, self.update_move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
-            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, rotate, 550, 225, self.update_move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
+            SubBoard(size, pos[0],          pos[1] + size, selfmain, 0, rotate, 300, 475, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2), 
+            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, selfmain, 1, rotate, 550, 475, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
+            SubBoard(size, pos[0],          pos[1],        selfmain, 2, rotate, 300, 225, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
+            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, rotate, 550, 225, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
         )
         self.layout = selfmain
 
         #Si on veut faire des rotations via deux boutons seuls :
         #selfmain.add_widget(self.button1)
         #selfmain.add_widget(self.button2)
-
-
-    def update_move(self, id_board, index_box, sens):
-        self.update_move = (id_board, index_box, sens)
 
     def able_board(self):
         for elt in self.boards:
@@ -66,5 +62,5 @@ class Board:
         self.layout.add_widget(button1)
         self.layout.add_widget(button2)
     
-    def win_party(self):
+    def win_game(self):
         self.layout.add_widget(Label(text = f"Player {Player.player} wiiiiiiiiiiiiiiiin ! "))

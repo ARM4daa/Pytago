@@ -31,7 +31,7 @@ class SubBoard:
         self.box = []
         for i in range(3):            
             for j in range(3):    
-                self.box.append(Box([x_first_box + i*75, y_first_box - j*75], self.disable_all_boxes, self.able_all_boards, self.id_board, i*3 + j))
+                self.box.append(Box([x_first_box + i*75, y_first_box - j*75], self.disable_all_boxes, self.able_all_boards, self.id_board, i*3 + j, move))
         
 
         #Print board then boxe
@@ -171,6 +171,7 @@ class SubBoard:
                 self.box[i*3 + j].free = True
                 self.box[i*3 + j].box.background_normal = "test_placement.jpeg"
                 self.box[i*3 + j].box.background_disabled_normal = "test_placement.jpeg"
+                
     def win(self):
         "Animation when a player win"
         pass
