@@ -4,7 +4,7 @@ from kivy.graphics import Color, Ellipse
 from kivy.uix.behaviors import ButtonBehavior
 
 class Box(ButtonBehavior):
-    def __init__(self, pos_xy, disable_all_boxes, able_all_boards, id_board, id_box):
+    def __init__(self, pos_xy, disable_all_boxes, able_all_boards, id_board, id_box, move):
         """
         Doc
         """
@@ -27,6 +27,7 @@ class Box(ButtonBehavior):
         self.able_all_boards = able_all_boards  
 
         self.id_box = (id_box, id_board)            #Identity of the box on the main board   
+        
         self.move = move
 
         values = {0: 8,
@@ -64,4 +65,5 @@ class Box(ButtonBehavior):
             self.disable_all_boxes()
             self.able_all_boards()
 
-        self.move[0] = self.value
+            self.move[0] = self.value
+            return self.id_box

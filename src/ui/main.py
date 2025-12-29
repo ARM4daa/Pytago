@@ -13,8 +13,8 @@ from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 from board import Board
-"import pytago_core as core"
-"import pytago_ai as ai"
+import pytago_core as core
+import pytago_ai as ai
 
 class LoginScreen(FloatLayout):
     def __init__(self, **kwargs):
@@ -28,7 +28,7 @@ class LoginScreen(FloatLayout):
         
         self.board = Board([275, 50], 250, self.play, self)
 
-        mode_solo.bind(on_press = lambda x: self.run_party(x))
+        mode_solo.bind(on_press = lambda x: self.run_game(x))
         reset_game.bind(on_press = lambda x: self.reset(x))
         button_test_win.bind(on_press = lambda x: self.win(x))
         self.win_p = True
@@ -45,10 +45,10 @@ class LoginScreen(FloatLayout):
         self.ai_to_play = False
         self.level = 1
     
-    def run_party(self, instance):
+    def run_game(self, instance):
 
         """
-        @brief run_party.
+        @brief run_game.
 
         Initialize boards to start the game.
 
@@ -89,7 +89,7 @@ class LoginScreen(FloatLayout):
 
         self.bitboard_me = core.place_marble(self.bitboard_me, move[0])
         if core.is_won(self.bitboard_me):
-            self.board.win_party()
+            self.board.win_game()
         else:
             if self.board.move[2]:
                 core.rotate_board_clockwise(self.bitboard_me, move[1])
