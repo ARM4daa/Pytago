@@ -169,8 +169,8 @@ class SubBoard:
             for j in range(3):
                 self.box[i*3 + j].disabled = True
                 self.box[i*3 + j].free = True
-                self.box[i*3 + j].box.background_normal = "test_placement.jpeg"
-                self.box[i*3 + j].box.background_disabled_normal = "test_placement.jpeg"
+                self.box[i*3 + j].box.background_normal = "contour2.PNG"
+                self.box[i*3 + j].box.background_disabled_normal = "contour2.PNG"
                 
     def win(self):
         "Animation when a player win"

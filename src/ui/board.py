@@ -16,6 +16,10 @@ class Board:
         )
         self.layout = selfmain
 
+        #Si on veut faire des rotations via deux boutons seuls :
+        #selfmain.add_widget(self.button1)
+        #selfmain.add_widget(self.button2)
+
     def able_board(self):
         for elt in self.boards:
             elt.able_board()

@@ -1,6 +1,5 @@
 from player import Player
 from kivy.uix.button import Button
-from kivy.graphics import Color, Ellipse
 from kivy.uix.behaviors import ButtonBehavior
 
 class Box(ButtonBehavior):
@@ -13,12 +12,12 @@ class Box(ButtonBehavior):
         #Create the representation of the box in the game
         self.box = Button(
             pos = pos_xy, 
-            size = [50, 50],
+            size = [70, 70],
             size_hint = (None, None), 
-            background_normal = "test_placement.jpeg",
-            background_disabled_normal = "test_placement.jpeg",
+            background_normal = "contour2.PNG",
+            background_disabled_normal = "contour2.PNG",
             disabled = True,
-            border = (0, 0, 0, 0)
+            border = [0, 0, 0, 0]
         )
         self.box.bind(on_press = lambda x: self.play(x))
 
@@ -39,9 +38,8 @@ class Box(ButtonBehavior):
          6: 5,
          7: 2,
          8: 6}
-        
-        self.value = 2 ** (values[self.id_box[0]] + (3 - self.id_box[1])*9)
 
+        self.value = 2 ** (values[self.id_box[0]] + (3 - self.id_box[1])*9)
     
     def play(self, instance):
         """
