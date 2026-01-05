@@ -1,7 +1,6 @@
 from setuptools import setup, Extension
 
-
-module = Extension(
+core_module = Extension(
     "pytago_core",
     sources=[
         "src/wrappers/python_core.c",
@@ -10,23 +9,15 @@ module = Extension(
     include_dirs=["src/core"],
     extra_compile_args=[
         "-O3",
-        "-march=native",
-        "-mtune=native",
         "-flto",
         "-funroll-loops",
-        "-ffast-math",
+        "-march=native",
+        "-mtune=native"
     ],
     extra_link_args=["-flto"],
 )
 
-setup(
-    name="pytago_core",
-    version="1.0",
-    ext_modules=[module],
-)
-
-
-module = Extension(
+ai_module = Extension(
     "pytago_ai",
     sources=[
         "src/wrappers/python_ai.c",
@@ -36,17 +27,16 @@ module = Extension(
     include_dirs=["src/core", "src/ai"],
     extra_compile_args=[
         "-O3",
-        "-march=native",
-        "-mtune=native",
         "-flto",
         "-funroll-loops",
-        "-ffast-math",
+        "-march=native",
+        "-mtune=native"
     ],
     extra_link_args=["-flto"],
 )
 
 setup(
-    name="pytago_ai",
+    name="pytago",
     version="1.0",
-    ext_modules=[module],
+    ext_modules=[core_module, ai_module],
 )
