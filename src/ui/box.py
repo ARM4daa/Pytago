@@ -27,8 +27,6 @@ class Box(ButtonBehavior):
 
         self.move = move
 
-        self.id_box = (id_board, id_box)            #Identity of the box on the main board   
-
         values = {0: 8,
          1: 4,
          2: 7,
@@ -39,7 +37,8 @@ class Box(ButtonBehavior):
          7: 2,
          8: 6}
 
-        self.value = 2 ** (values[self.id_box[0]] + (3 - self.id_box[1])*9)
+        self.value = 2 ** (values[id_box] + (3 - id_board)*9)
+
     
     def play(self, instance):
         """
@@ -65,4 +64,3 @@ class Box(ButtonBehavior):
 
             #Return value to modify bitboard
             self.move[0] = self.value
-            return self.id_box
