@@ -1,6 +1,7 @@
 from player import Player
 from kivy.uix.button import Button
 from kivy.uix.behaviors import ButtonBehavior
+from time import sleep
 
 class Box(ButtonBehavior):
     def __init__(self, pos_xy, disable_all_boxes, able_all_boards, id_board, id_box, move):

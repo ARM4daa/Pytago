@@ -8,15 +8,13 @@
 
 """
 
-
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 from board import Board
-from time import sleep
 from kivy.clock import Clock
-"import pytago_core as core"
-"import pytago_ai as ai"
+import pytago_core as core
+import pytago_ai as ai
 
 class LoginScreen(FloatLayout):
     def __init__(self, **kwargs):
@@ -30,9 +28,10 @@ class LoginScreen(FloatLayout):
         
         self.board = Board([275, 50], 250, self.play, self)
 
-        mode_duo.bind(on_press = lambda x: self.run_game(x))
+        mode_solo.bind(on_press = lambda x: self.solo_mode_game(x))
+        mode_duo.bind(on_press = lambda x: self.duo_mode_game(x))
         reset_game.bind(on_press = lambda x: self.reset(x))
-        button_test_win.bind(on_press = lambda x: self.win(x))
+        button_test_win.bind(on_press = lambda x: self.win_game(x))
 
         self.add_widget(reset_game)
         self.add_widget(mode_solo)
@@ -44,9 +43,17 @@ class LoginScreen(FloatLayout):
         self.bitboard_opp = 0
         self.single_player = False
         self.ai_to_play = False
-        self.level = 1
+        self.level = 4
         self.recursion = False
     
+    def solo_mode_game(self, instance):
+        self.single_player = True
+        self.run_game(instance)
+
+    def duo_mode_game(self, instance):
+        self.single_player = False
+        self.run_game(instance)
+        
     def run_game(self, instance):
 
         """
@@ -60,22 +67,6 @@ class LoginScreen(FloatLayout):
         """
         self.reset(instance)
         self.board.able_box()
-
-    def win(self, instance):
-        """Try victory animation"""
-        self.index = 0
-        self.ordre = [6, 3, 0, 1, 2, 5, 8, 7, 4]
-        self.event_victory = Clock.schedule_interval(self.test_win, 0.3)
-
-    def test_win(self, dt):
-        for i in range(4):
-            self.board.boards[i].box[self.ordre[self.index]].box.background_disabled_normal = "billeNoire.PNG"
-            self.board.boards[i].box[self.ordre[self.index]].box.background_normal = "billeNoire.PNG"
-        
-        if self.index >= 8:
-            Clock.unschedule(self.event_victory)
-        else:
-            self.index += 1
 
     def reset(self, instance):
         """
@@ -104,16 +95,17 @@ class LoginScreen(FloatLayout):
         """
 
         self.bitboard_me = core.place_marble(self.bitboard_me, move[0])
+        if self.board.move[2]:
+            self.bitboard_me = core.rotate_board_clockwise(self.bitboard_me, move[1])
+            self.bitboard_opp = core.rotate_board_clockwise(self.bitboard_opp, move[1])
+        else:
+            self.bitboard_me = core.rotate_board_aclockwise(self.bitboard_me, move[1])
+            self.bitboard_opp = core.rotate_board_aclockwise(self.bitboard_opp, move[1])
+        print(bin(self.bitboard_me)[2:].zfill(36))
         if core.is_won(self.bitboard_me):
             self.board.win_game()
-        else:
-            if self.board.move[2]:
-                core.rotate_board_clockwise(self.bitboard_me, move[1])
-                core.rotate_board_clockwise(self.bitboard_opp, move[1])
-            else:
-                core.rotate_board_aclockwise(self.bitboard_me, move[1])
-                core.rotate_board_aclockwise(self.bitboard_opp, move[1])
-            self.bitboard_me, self.bitboard_opp = self.bitboard_opp, self.bitboard_me
+            return 1
+        self.bitboard_me, self.bitboard_opp = self.bitboard_opp, self.bitboard_me
         
     def play(self):
         """
@@ -131,23 +123,38 @@ class LoginScreen(FloatLayout):
         if self.single_player:
             if self.ai_to_play:
                 best = ai.get_best_move(self.bitboard_me, self.bitboard_opp, self.level)
-                print(best)
                 self.apply_move(best)
                 self.recursion = True
                 self.board.apply_move(best)
-                print(self.bitboard_opp)
                 self.recursion = False
                 self.ai_to_play = False
             else:
-                self.apply_move(self.board.move)
-                print(self.board.move)
-                self.ai_to_play = True
-                self.play()
+                won = self.apply_move(self.board.move)
+                if not won:
+                    self.ai_to_play = True
+                    self.play()
         else:
             self.apply_move(self.board.move)
+
+    def win_game(self, instance):
+        """Try victory animation"""
+        self.index = 0
+        self.ordre = [6, 3, 0, 1, 2, 5, 8, 7, 4]
+        self.event_victory = Clock.schedule_interval(self.test_win, 0.3)
+
+    def test_win(self, dt):
+        for i in range(4):
+            self.board.boards[i].box[self.ordre[self.index]].box.background_disabled_normal = "billeNoire.PNG"
+            self.board.boards[i].box[self.ordre[self.index]].box.background_normal = "billeNoire.PNG"
+        
+        if self.index >= 8:
+            Clock.unschedule(self.event_victory)
+        else:
+            self.index += 1
 
 class MyApp(App):
     def build(self):
         return LoginScreen()
 
+print(core.is_won(0b000000001010100001010000001000000000))
 MyApp().run()

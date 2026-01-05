@@ -31,7 +31,7 @@ class SubBoard:
         self.box = []
         for i in range(3):            
             for j in range(3):    
-                self.box.append(Box([x_first_box + i*75, y_first_box - j*75], self.disable_all_boxes, self.able_all_boards, self.id_board, i*3 + j, move))
+                self.box.append(Box([x_first_box + j*75, y_first_box - i*75], self.disable_all_boxes, self.able_all_boards, self.id_board, i*3 + j, move))
         
 
         #Print board then boxe
@@ -103,7 +103,7 @@ class SubBoard:
         self.layout_ajout.add_widget(self.button2)
     
 
-    def rotate_right(self, instance):
+    def rotate_left(self, instance):
         """
         Doc
         """
@@ -128,13 +128,13 @@ class SubBoard:
 
         #Used to turn management
         Player.player = (Player.player + 1) % 2                 #Move to the oser player
-        self.move[1:3] = (self.id_board, 1)                     #Modify value for the bitboard
+        self.move[1:3] = (self.id_board, 0)                     #Modify value for the bitboard
         self.disable_all_boards()                               #Deactivates the boards
         self.able_all_boxes()                                   #Activates the squares 
         self.disable_rotate_button()
         self.handler_rotate()
 
-    def rotate_left(self, instance):
+    def rotate_right(self, instance):
         """
         Doc
         """
@@ -159,7 +159,7 @@ class SubBoard:
 
         #Used to turn management
         Player.player = (Player.player + 1) % 2                 #Move to the oser player
-        self.move[1:3] = (self.id_board, 0)                     #Modify value for the bitboard
+        self.move[1:3] = (self.id_board, 1)                     #Modify value for the bitboard
         self.disable_all_boards()                               #Deactivates the boards
         self.able_all_boxes()                                   #Activates the squares 
         self.disable_rotate_button()
