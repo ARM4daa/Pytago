@@ -45,6 +45,7 @@ class LoginScreen(FloatLayout):
         self.single_player = False
         self.ai_to_play = False
         self.level = 1
+        self.recursion = False
     
     def run_game(self, instance):
 
@@ -125,13 +126,23 @@ class LoginScreen(FloatLayout):
         @param self: object of LoginScreen
         @return None
         """
+        if self.recursion :
+            return None
         if self.single_player:
             if self.ai_to_play:
                 best = ai.get_best_move(self.bitboard_me, self.bitboard_opp, self.level)
+                print(best)
                 self.apply_move(best)
+                self.recursion = True
+                self.board.apply_move(best)
+                print(self.bitboard_opp)
+                self.recursion = False
+                self.ai_to_play = False
             else:
                 self.apply_move(self.board.move)
-            self.ai_to_play = not self.ai_to_play
+                print(self.board.move)
+                self.ai_to_play = True
+                self.play()
         else:
             self.apply_move(self.board.move)
 

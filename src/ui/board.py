@@ -2,6 +2,7 @@ from subboard import SubBoard
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from player import Player
+import math
 
 class Board:
     def __init__(self, pos, size, apply_move, selfmain):
@@ -12,13 +13,42 @@ class Board:
             SubBoard(size, pos[0],          pos[1] + size, selfmain, 0, apply_move, 300, 475, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2), 
             SubBoard(size, pos[0] * 2 - 25, pos[1] + size, selfmain, 1, apply_move, 550, 475, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
             SubBoard(size, pos[0],          pos[1],        selfmain, 2, apply_move, 300, 225, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
-            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, apply_move, 550, 225, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board,  self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
+            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, apply_move, 550, 225, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
         )
         self.layout = selfmain
+                
+        self.values_reverse = {8: 0,
+         4: 1,
+         7: 2,
+         1: 3,
+         0: 4,
+         3: 5,
+         5: 6,
+         2: 7,
+         6: 8}
 
         #Si on veut faire des rotations via deux boutons seuls :
         #selfmain.add_widget(self.button1)
         #selfmain.add_widget(self.button2)
+
+    def apply_move(self,move) :
+        
+        """
+        @brief apply_move.
+
+        calculate the case with the power of 2 associate and place the ball
+
+        @param self: object of Board
+        @param move: the move gives by the AI to apply on the board
+        @return None
+        """
+
+        values = (int(3-math.log2(move[0])//9), self.values_reverse[math.log2(move[0])%9])
+        self.boards[values[0]].box[values[1]].play(None)
+        if move[2] :
+            self.boards[move[1]].rotate_right(None)
+        else :
+            self.boards[move[1]].rotate_left(None)
 
     def able_board(self):
         for elt in self.boards:
