@@ -12,10 +12,10 @@ class Box(ButtonBehavior):
         #Create the representation of the box in the game
         self.box = Button(
             pos = pos_xy, 
-            size = [50, 50],
+            size = [70, 70],
             size_hint = (None, None), 
-            background_normal = "test_placement.jpeg",
-            background_disabled_normal = "test_placement.jpeg",
+            background_normal = "contour2.PNG",
+            background_disabled_normal = "contour2.PNG",
             disabled = True,
             border = [0, 0, 0, 0]
         )

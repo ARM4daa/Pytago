@@ -13,8 +13,10 @@ from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 from board import Board
-import pytago_core as core
-import pytago_ai as ai
+from time import sleep
+from kivy.clock import Clock
+"import pytago_core as core"
+"import pytago_ai as ai"
 
 class LoginScreen(FloatLayout):
     def __init__(self, **kwargs):
@@ -28,10 +30,9 @@ class LoginScreen(FloatLayout):
         
         self.board = Board([275, 50], 250, self.play, self)
 
-        mode_solo.bind(on_press = lambda x: self.run_game(x))
+        mode_duo.bind(on_press = lambda x: self.run_game(x))
         reset_game.bind(on_press = lambda x: self.reset(x))
         button_test_win.bind(on_press = lambda x: self.win(x))
-        self.win_p = True
 
         self.add_widget(reset_game)
         self.add_widget(mode_solo)
@@ -56,10 +57,24 @@ class LoginScreen(FloatLayout):
         @param instance: button object
         @return None
         """
-
-        self.win_p = True
-        self.board.able_board()
+        self.reset(instance)
         self.board.able_box()
+
+    def win(self, instance):
+        """Try victory animation"""
+        self.index = 0
+        self.ordre = [6, 3, 0, 1, 2, 5, 8, 7, 4]
+        self.event_victory = Clock.schedule_interval(self.test_win, 0.3)
+
+    def test_win(self, dt):
+        for i in range(4):
+            self.board.boards[i].box[self.ordre[self.index]].box.background_disabled_normal = "billeNoire.PNG"
+            self.board.boards[i].box[self.ordre[self.index]].box.background_normal = "billeNoire.PNG"
+        
+        if self.index >= 8:
+            Clock.unschedule(self.event_victory)
+        else:
+            self.index += 1
 
     def reset(self, instance):
         """

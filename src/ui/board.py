@@ -9,10 +9,10 @@ class Board:
         self.button1 = Button(pos=[25, 150], size_hint = [None, None], size = [75, 75])
         self.button2 = Button(pos=[125, 150], size_hint = [None, None], size = [75, 75])
         self.boards = (
-            SubBoard(size, pos[0],          pos[1] + size, selfmain, 0, apply_move, 300, 475, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2), 
-            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, selfmain, 1, apply_move, 550, 475, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
-            SubBoard(size, pos[0],          pos[1],        selfmain, 2, apply_move, 300, 225, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
-            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, apply_move, 550, 225, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
+            SubBoard(size, pos[0],          pos[1] + size, selfmain, 0, apply_move, 290, 465, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2), 
+            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, selfmain, 1, apply_move, 540, 465, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
+            SubBoard(size, pos[0],          pos[1],        selfmain, 2, apply_move, 290, 215, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
+            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, apply_move, 540, 215, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
         )
         self.layout = selfmain
 
