@@ -131,8 +131,11 @@ class LoginScreen(FloatLayout):
         else:
             self.apply_move(self.board.move)
 
+
 class MyApp(App):
     def build(self):
         return LoginScreen()
 
-MyApp().run()
+
+def main():
+    MyApp().run()
