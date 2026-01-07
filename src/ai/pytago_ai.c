@@ -6,7 +6,24 @@
 #include "pytago_ai.h"
 
 
+#define TT_SIZE 4000003
+#define WIN_SCORE 10000
+
+
 static const int puissance_of_5[6] = {1, 5, 25, 125, 625, 3125};
+
+typedef enum { EXACT, LOWERBOUND, UPPERBOUND } TTFlag;
+
+typedef struct {
+    uint64_t key_me;
+    uint64_t key_opp;
+    int depth;
+    int score;
+    TTFlag flag;
+} TTEntry;
+
+
+TTEntry tt[TT_SIZE];
 
 
 static inline int nb_bit(uint64_t board) {
@@ -22,33 +39,17 @@ static inline int evaluate(uint64_t board_me, uint64_t board_opp) {
     for (int i = 0; i < 32; i++) {
         uint64_t mask = WIN_MASKS[i];
         p = nb_bit(board_me & mask);
-        if (p != 0) {
-            score_me += puissance_of_5[p];
-        }
+        if (p != 0) score_me += puissance_of_5[p];
     }
 
     for (int i = 0; i < 32; i++) {
         uint64_t mask = WIN_MASKS[i];
         p = nb_bit(board_opp & mask);
-        if (p != 0) {
-            score_opp += puissance_of_5[p];
-        }
+        if (p != 0) score_opp += puissance_of_5[p];
     }
 
     return score_me - score_opp;
 }
-
-
-#define TT_SIZE 4000003
-
-typedef struct {
-    uint64_t key_me;
-    uint64_t key_opp;
-    int depth;
-    int score;
-} TTEntry;
-
-TTEntry tt[TT_SIZE];
 
 
 static inline uint64_t hash_board(uint64_t me, uint64_t opp) {
@@ -56,53 +57,66 @@ static inline uint64_t hash_board(uint64_t me, uint64_t opp) {
 }
 
 
-int tt_lookup(uint64_t me, uint64_t opp, int depth, int *score) {
+int tt_lookup(uint64_t me, uint64_t opp, int depth, int alpha, int beta, int *score) {
     uint64_t idx = hash_board(me, opp);
-    if (tt[idx].key_me == me && tt[idx].key_opp == opp && tt[idx].depth == depth) {
-        *score = tt[idx].score;
+    TTEntry *e = &tt[idx];
+
+    if (e->key_me != me || e->key_opp != opp || e->depth < depth)
+        return 0;
+
+    if (e->flag == EXACT) {
+        *score = e->score;
+        return 1;
+    } else if (e->flag == LOWERBOUND && e->score >= beta) {
+        *score = e->score;
+        return 1;
+    } else if (e->flag == UPPERBOUND && e->score <= alpha) {
+        *score = e->score;
         return 1;
     }
+
     return 0;
 }
 
 
-void tt_store(uint64_t me, uint64_t opp, int depth, int score) {
+void tt_store(uint64_t me, uint64_t opp, int depth, int score, int alpha, int beta) {
     uint64_t idx = hash_board(me, opp);
-    tt[idx].key_me = me;
-    tt[idx].key_opp = opp;
-    tt[idx].depth = depth;
-    tt[idx].score = score;
+    TTEntry *e = &tt[idx];
+    e->key_me = me;
+    e->key_opp = opp;
+    e->depth = depth;
+    e->score = score;
+
+    if (score >= beta) e->flag = LOWERBOUND;
+    else if (score <= alpha) e->flag = UPPERBOUND;
+    else e->flag = EXACT;
 }
 
-
-int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
+int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta) {
     int score;
 
-    if (tt_lookup(me, opp, depth, &score)) {
-        return score;
-    }
+    if (tt_lookup(me, opp, depth, alpha, beta, &score)) return score;
+
+    int alpha_orig = alpha;
 
     if (is_won(me) && is_won(opp)) {
         score = -depth;
-        tt_store(me, opp, depth, score);
+        tt_store(me, opp, depth, score, alpha, beta);
         return score;
     }
-
     if (is_won(me)) {
-        score = 10000 - depth;
-        tt_store(me, opp, depth, score);
+        score = WIN_SCORE - depth;
+        tt_store(me, opp, depth, score, alpha, beta);
         return score;
     }
-
     if (is_won(opp)) {
-        score = -10000 + depth;
-        tt_store(me, opp, depth, score);
+        score = -WIN_SCORE + depth;
+        tt_store(me, opp, depth, score, alpha, beta);
         return score;
     }
-
     if (depth == 0) {
         score = evaluate(me, opp);
-        tt_store(me, opp, depth, score);
+        tt_store(me, opp, depth, score, alpha, beta);
         return score;
     }
 
@@ -113,13 +127,12 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
 
     while (m != 68719476736) {
         if ((m & board) == 0) {
-            for (int i = 0; i < 4; i++){
+            for (int i = 0; i < 4; i++) {
                 child_me = rotate_board_aclockwise(me | m, i);
                 child_opp = rotate_board_aclockwise(opp, i);
-
                 score = -negamax(child_opp, child_me, depth-1, -beta, -alpha);
-                if (score >= beta){
-                    //tt_store(me, opp, depth, score);
+                if (score >= beta) {
+                    tt_store(me, opp, depth, score, alpha_orig, beta);
                     return score;
                 }
                 if (score > best) best = score;
@@ -127,10 +140,9 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
 
                 child_me = rotate_board_clockwise(me | m, i);
                 child_opp = rotate_board_clockwise(opp, i);
-
                 score = -negamax(child_opp, child_me, depth-1, -beta, -alpha);
-                if (score >= beta){
-                    //tt_store(me, opp, depth, score);
+                if (score >= beta) {
+                    tt_store(me, opp, depth, score, alpha_orig, beta);
                     return score;
                 }
                 if (score > best) best = score;
@@ -140,14 +152,11 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
         m <<= 1;
     }
 
-    tt_store(me, opp, depth, best);
+    tt_store(me, opp, depth, best, alpha_orig, beta);
     return best;
 }
 
-
-struct move get_best_move(uint64_t me, uint64_t opp, int depth){
-    memset(tt, 0, sizeof(tt));
-
+struct move get_best_move(uint64_t me, uint64_t opp, int depth) {
     int best = -10000;
     int score = 0;
     uint64_t child_me, child_opp;
@@ -156,14 +165,13 @@ struct move get_best_move(uint64_t me, uint64_t opp, int depth){
     uint64_t m = 1;
     uint64_t board = me | opp;
 
-    while (m != 68719476736) {      // 2**36
+    while (m != 68719476736) { // 2**36
         if ((m & board) == 0) {
-            for (int i = 0; i < 4; i++){
+            for (int i = 0; i < 4; i++) {
                 child_me = rotate_board_aclockwise(me | m, i);
                 child_opp = rotate_board_aclockwise(opp, i);
-
                 score = -negamax(child_opp, child_me, depth-1, -10000, 10000);
-                if (score >= best){
+                if (score >= best) {
                     best = score;
                     best_move.pos = m;
                     best_move.quadrant = i;
@@ -172,9 +180,8 @@ struct move get_best_move(uint64_t me, uint64_t opp, int depth){
 
                 child_me = rotate_board_clockwise(me | m, i);
                 child_opp = rotate_board_clockwise(opp, i);
-
                 score = -negamax(child_opp, child_me, depth-1, -10000, 10000);
-                if (score >= best){
+                if (score >= best) {
                     best = score;
                     best_move.pos = m;
                     best_move.quadrant = i;
