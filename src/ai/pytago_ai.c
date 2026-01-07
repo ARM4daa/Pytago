@@ -82,7 +82,25 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
         return score;
     }
 
-    if (is_won(me) || depth == 0){
+    if (is_won(me) && is_won(opp)) {
+        score = -depth;
+        tt_store(me, opp, depth, score);
+        return score;
+    }
+
+    if (is_won(me)) {
+        score = 10000 - depth;
+        tt_store(me, opp, depth, score);
+        return score;
+    }
+
+    if (is_won(opp)) {
+        score = -10000 + depth;
+        tt_store(me, opp, depth, score);
+        return score;
+    }
+
+    if (depth == 0) {
         score = evaluate(me, opp);
         tt_store(me, opp, depth, score);
         return score;
