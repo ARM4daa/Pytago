@@ -1,6 +1,6 @@
 #include <stdint.h>
-#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "core.h"
 #include "masks.h"
 #include "pytago_ai.h"
@@ -8,7 +8,15 @@
 
 #define TT_SIZE 4000003
 #define WIN_SCORE 10000
+#define MAX_MOVES 288
 
+
+struct scored_move {
+    uint64_t pos;
+    int quadrant;
+    int clockwise;
+    int score;
+};
 
 static const int puissance_of_5[6] = {1, 5, 25, 125, 625, 3125};
 
@@ -92,6 +100,7 @@ void tt_store(uint64_t me, uint64_t opp, int depth, int score, int alpha, int be
     else e->flag = EXACT;
 }
 
+
 int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta) {
     int score;
 
@@ -125,7 +134,7 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta) {
     uint64_t m = 1;
     uint64_t board = me | opp;
 
-    while (m != 68719476736) {
+    while (m != 68719476736ULL) {
         if ((m & board) == 0) {
             for (int i = 0; i < 4; i++) {
                 child_me = rotate_board_aclockwise(me | m, i);
@@ -156,41 +165,91 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta) {
     return best;
 }
 
-struct move get_best_move(uint64_t me, uint64_t opp, int depth) {
-    int best = -10000;
-    int score = 0;
-    uint64_t child_me, child_opp;
-    struct move best_move;
 
-    uint64_t m = 1;
+static int cmp_desc(const void *a, const void *b) {
+    return ((struct scored_move*)b)->score - ((struct scored_move*)a)->score;
+}
+
+
+static void apply_move(uint64_t me, uint64_t opp, struct scored_move *mv,
+                       uint64_t *child_me, uint64_t *child_opp) {
+    if (mv->clockwise) {
+        *child_me = rotate_board_clockwise(me | mv->pos, mv->quadrant);
+        *child_opp = rotate_board_clockwise(opp, mv->quadrant);
+    } else {
+        *child_me = rotate_board_aclockwise(me | mv->pos, mv->quadrant);
+        *child_opp = rotate_board_aclockwise(opp, mv->quadrant);
+    }
+}
+
+
+static int generate_root_moves(uint64_t me, uint64_t opp, struct scored_move *moves) {
+    int count = 0;
     uint64_t board = me | opp;
+    uint64_t m = 1;
 
-    while (m != 68719476736) { // 2**36
+    while (m != 68719476736ULL) { // 2**36
         if ((m & board) == 0) {
-            for (int i = 0; i < 4; i++) {
-                child_me = rotate_board_aclockwise(me | m, i);
-                child_opp = rotate_board_aclockwise(opp, i);
-                score = -negamax(child_opp, child_me, depth-1, -10000, 10000);
-                if (score >= best) {
-                    best = score;
-                    best_move.pos = m;
-                    best_move.quadrant = i;
-                    best_move.clockwise = 0;
-                }
-
-                child_me = rotate_board_clockwise(me | m, i);
-                child_opp = rotate_board_clockwise(opp, i);
-                score = -negamax(child_opp, child_me, depth-1, -10000, 10000);
-                if (score >= best) {
-                    best = score;
-                    best_move.pos = m;
-                    best_move.quadrant = i;
-                    best_move.clockwise = 1;
-                }
+            for (int q = 0; q < 4; q++) {
+                moves[count++] = (struct scored_move){m, q, 0, 0};
+                moves[count++] = (struct scored_move){m, q, 1, 0};
             }
         }
         m <<= 1;
     }
+    return count;
+}
+
+
+static void score_root_moves(uint64_t me, uint64_t opp, struct scored_move *moves, int count, int depth) {
+    int alpha = 10000;
+    int beta  = -10000;
+
+    for (int i = 0; i < count; i++) {
+        uint64_t child_me, child_opp;
+        apply_move(me, opp, &moves[i], &child_me, &child_opp);
+        int score = 0;
+        if (tt_lookup(child_me, child_opp, depth-1, alpha, beta, &score)) {
+            moves[i].score = score;
+        } else {
+            moves[i].score = 0; // TODO: use heuristics as fallback
+        }
+    }
+}
+
+
+struct move get_best_move(uint64_t me, uint64_t opp, int max_depth) {
+    struct move best_move = {0};
+    int best_score = -10000;
+
+    struct scored_move moves[MAX_MOVES];
+    int move_count = generate_root_moves(me, opp, moves);
+
+    for (int d = 1; d <= max_depth; d++) {
+        score_root_moves(me, opp, moves, move_count, d);
+
+        qsort(moves, move_count, sizeof(struct scored_move), cmp_desc);
+
+        int alpha = -10000;
+        int beta = 10000;
+
+        for (int i = 0; i < move_count; i++) {
+            uint64_t child_me, child_opp;
+            apply_move(me, opp, &moves[i], &child_me, &child_opp);
+
+            int score = -negamax(child_opp, child_me, d-1, -beta, -alpha);
+
+            if (score > best_score) {
+                best_score = score;
+                best_move.pos = moves[i].pos;
+                best_move.quadrant = moves[i].quadrant;
+                best_move.clockwise = moves[i].clockwise;
+            }
+
+            if (best_score > alpha) alpha = best_score;
+        }
+    }
 
     return best_move;
 }
+
