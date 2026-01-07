@@ -28,7 +28,7 @@ class LoginScreen(FloatLayout):
         
         self.board = Board([275, 50], 250, self.play, self)
 
-        mode_solo.bind(on_press = lambda x: self.run_game(x))
+        mode_duo.bind(on_press = lambda x: self.run_game(x))
         reset_game.bind(on_press = lambda x: self.reset(x))
         button_test_win.bind(on_press = lambda x: self.win(x))
         self.win_p = True
@@ -41,9 +41,10 @@ class LoginScreen(FloatLayout):
 
         self.bitboard_me = 0
         self.bitboard_opp = 0
-        self.single_player = False
+        self.single_player = True
         self.ai_to_play = False
         self.level = 1
+        self.recursion = False
     
     def run_game(self, instance):
 
@@ -110,13 +111,23 @@ class LoginScreen(FloatLayout):
         @param self: object of LoginScreen
         @return None
         """
+        if self.recursion :
+            return None
         if self.single_player:
             if self.ai_to_play:
                 best = ai.get_best_move(self.bitboard_me, self.bitboard_opp, self.level)
+                print(best)
                 self.apply_move(best)
+                self.recursion = True
+                self.board.apply_move(best)
+                print(self.bitboard_opp)
+                self.recursion = False
+                self.ai_to_play = False
             else:
                 self.apply_move(self.board.move)
-            self.ai_to_play = not self.ai_to_play
+                print(self.board.move)
+                self.ai_to_play = True
+                self.play()
         else:
             self.apply_move(self.board.move)
 
