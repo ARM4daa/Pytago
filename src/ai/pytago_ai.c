@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 #include "core.h"
 #include "masks.h"
 #include "pytago_ai.h"
@@ -57,7 +58,7 @@ static inline uint64_t hash_board(uint64_t me, uint64_t opp) {
 
 int tt_lookup(uint64_t me, uint64_t opp, int depth, int *score) {
     uint64_t idx = hash_board(me, opp);
-    if (tt[idx].key_me == me && tt[idx].key_opp == opp && tt[idx].depth >= depth) {
+    if (tt[idx].key_me == me && tt[idx].key_opp == opp && tt[idx].depth == depth) {
         *score = tt[idx].score;
         return 1;
     }
@@ -98,9 +99,9 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
                 child_me = rotate_board_aclockwise(me | m, i);
                 child_opp = rotate_board_aclockwise(opp, i);
 
-                score = -negamax(child_opp, child_me, depth-1, -alpha, -beta);
+                score = -negamax(child_opp, child_me, depth-1, -beta, -alpha);
                 if (score >= beta){
-                    tt_store(me, opp, depth, score);
+                    //tt_store(me, opp, depth, score);
                     return score;
                 }
                 if (score > best) best = score;
@@ -109,9 +110,9 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
                 child_me = rotate_board_clockwise(me | m, i);
                 child_opp = rotate_board_clockwise(opp, i);
 
-                score = -negamax(child_opp, child_me, depth-1, -alpha, -beta);
+                score = -negamax(child_opp, child_me, depth-1, -beta, -alpha);
                 if (score >= beta){
-                    tt_store(me, opp, depth, score);
+                    //tt_store(me, opp, depth, score);
                     return score;
                 }
                 if (score > best) best = score;
@@ -127,6 +128,8 @@ int negamax(uint64_t me, uint64_t opp, int depth, int alpha, int beta){
 
 
 struct move get_best_move(uint64_t me, uint64_t opp, int depth){
+    memset(tt, 0, sizeof(tt));
+
     int best = -10000;
     int score = 0;
     uint64_t child_me, child_opp;
@@ -142,7 +145,7 @@ struct move get_best_move(uint64_t me, uint64_t opp, int depth){
                 child_opp = rotate_board_aclockwise(opp, i);
 
                 score = -negamax(child_opp, child_me, depth-1, -10000, 10000);
-                if (score > best){
+                if (score >= best){
                     best = score;
                     best_move.pos = m;
                     best_move.quadrant = i;
@@ -153,7 +156,7 @@ struct move get_best_move(uint64_t me, uint64_t opp, int depth){
                 child_opp = rotate_board_clockwise(opp, i);
 
                 score = -negamax(child_opp, child_me, depth-1, -10000, 10000);
-                if (score > best){
+                if (score >= best){
                     best = score;
                     best_move.pos = m;
                     best_move.quadrant = i;
