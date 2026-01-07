@@ -31,7 +31,7 @@ class SubBoard:
         self.box = []
         for i in range(3):            
             for j in range(3):    
-                self.box.append(Box([x_first_box + i*75, y_first_box - j*75], self.disable_all_boxes, self.able_all_boards, self.id_board, i*3 + j, move))
+                self.box.append(Box([x_first_box + j*75, y_first_box - i*75], self.disable_all_boxes, self.able_all_boards, self.id_board, i*3 + j, move))
         
 
         #Print board then boxe
@@ -103,7 +103,7 @@ class SubBoard:
         self.layout_ajout.add_widget(self.button2)
     
 
-    def rotate_right(self, instance):
+    def rotate_left(self, instance):
         """
         Doc
         """
@@ -133,7 +133,7 @@ class SubBoard:
         self.able_all_boxes()                                   #Activates the squares 
         self.disable_rotate_button()
 
-    def rotate_left(self, instance):
+    def rotate_right(self, instance):
         """
         Doc
         """
@@ -171,7 +171,3 @@ class SubBoard:
                 self.box[i*3 + j].free = True
                 self.box[i*3 + j].box.background_normal = "contour2.PNG"
                 self.box[i*3 + j].box.background_disabled_normal = "contour2.PNG"
-                
-    def win(self):
-        "Animation when a player win"
-        pass

@@ -1,7 +1,7 @@
 from subboard import SubBoard
 from kivy.uix.button import Button
-from kivy.uix.label import Label
 from player import Player
+from kivy.clock import Clock
 
 class Board:
     def __init__(self, pos, size, apply_move, selfmain):
@@ -64,4 +64,22 @@ class Board:
         self.layout.add_widget(button2)
     
     def win_game(self):
-        self.layout.add_widget(Label(text = f"Player {Player.player} wiiiiiiiiiiiiiiiin ! "))
+        self.index = 0
+        self.ordre = [6, 3, 0, 1, 2, 5, 8, 7, 4]
+        self.event_victory = Clock.schedule_interval(self.test_win, 0.3)
+        self.disable_board()
+        self.disable_box()
+
+    def test_win(self, dt):
+        if Player.player == 0:
+            img = "billeBlanche.PNG"
+        else:
+            img = "billeNoire.PNG"
+        for i in range(4):
+            self.boards[i].box[self.ordre[self.index]].box.background_disabled_normal = img
+            self.boards[i].box[self.ordre[self.index]].box.background_normal = img
+        
+        if self.index >= 8:
+            Clock.unschedule(self.event_victory)
+        else:
+            self.index += 1
