@@ -3,9 +3,6 @@
 
 @brief Create the link between GUI and bitboards.
 
-@section author_sensors Author(s)
-- Created by Baptiste Farcy
-
 """
 
 from kivy.app import App
@@ -15,6 +12,8 @@ from board import Board
 from kivy.clock import Clock
 import pytago_core as core
 import pytago_ai as ai
+from time import sleep
+from player import Player
 
 class LoginScreen(FloatLayout):
     def __init__(self, **kwargs):
@@ -43,19 +42,40 @@ class LoginScreen(FloatLayout):
         self.bitboard_opp = 0
         self.single_player = False
         self.ai_to_play = False
-        self.level = 4
+        self.level = 7
         self.recursion = False
     
     def solo_mode_game(self, instance):
+        """
+        @brief solo_mode_game.
+
+        This function is launching when the player want to play solo againdt an ia.
+        It define the variable "single_player" to true.      
+
+        @param self: object of LoginScreen
+        @param instance: A REMPLIR
+        @return None
+        """
+
         self.single_player = True
         self.run_game(instance)
 
     def duo_mode_game(self, instance):
+        """
+        @brief duo_mode_game.
+
+        This function is launching when two player want to play together.
+        It define the variable "single_player" to false. 
+
+        @param self: object of LoginScreen
+        @param instance: A REMPLIR
+        @return None
+        """
+
         self.single_player = False
         self.run_game(instance)
         
     def run_game(self, instance):
-
         """
         @brief run_game.
 
@@ -65,6 +85,7 @@ class LoginScreen(FloatLayout):
         @param instance: button object
         @return None
         """
+
         self.reset(instance)
         self.board.able_box()
 
@@ -94,15 +115,32 @@ class LoginScreen(FloatLayout):
         @return None
         """
 
+        "print(bin(self.bitboard_me)[2:].zfill(36))"
         self.bitboard_me = core.place_marble(self.bitboard_me, move[0])
-        if self.board.move[2]:
+        print(move)
+        if move[2]:
             self.bitboard_me = core.rotate_board_clockwise(self.bitboard_me, move[1])
             self.bitboard_opp = core.rotate_board_clockwise(self.bitboard_opp, move[1])
         else:
             self.bitboard_me = core.rotate_board_aclockwise(self.bitboard_me, move[1])
             self.bitboard_opp = core.rotate_board_aclockwise(self.bitboard_opp, move[1])
-        print(bin(self.bitboard_me)[2:].zfill(36))
+        """
+        print("me : ", end="")
+        print(bin(self.bitboard_me)[2:].zfill(36), end=": ")
+        print(core.is_won(self.bitboard_me))
+        print("opp: ", end="")
+        print(bin(self.bitboard_opp)[2:].zfill(36), end=": ")
+        print(core.is_won(self.bitboard_opp))
+        print()
+        """
         if core.is_won(self.bitboard_me):
+            print("winnnn") #A SUPPRIMER
+            sleep(1)
+            self.board.win_game()
+            return 1
+        if core.is_won(self.bitboard_opp):
+            sleep(1)
+            Player.player = 0 if Player.player else 1
             self.board.win_game()
             return 1
         self.bitboard_me, self.bitboard_opp = self.bitboard_opp, self.bitboard_me
@@ -118,10 +156,14 @@ class LoginScreen(FloatLayout):
         @param self: object of LoginScreen
         @return None
         """
+
         if self.recursion :
             return None
         if self.single_player:
             if self.ai_to_play:
+                print(self.level)
+                print(bin(self.bitboard_me)[2:].zfill(36))
+                print(bin(self.bitboard_opp)[2:].zfill(36))
                 best = ai.get_best_move(self.bitboard_me, self.bitboard_opp, self.level)
                 self.apply_move(best)
                 self.recursion = True
@@ -136,25 +178,9 @@ class LoginScreen(FloatLayout):
         else:
             self.apply_move(self.board.move)
 
-    def win_game(self, instance):
-        """Try victory animation"""
-        self.index = 0
-        self.ordre = [6, 3, 0, 1, 2, 5, 8, 7, 4]
-        self.event_victory = Clock.schedule_interval(self.test_win, 0.3)
-
-    def test_win(self, dt):
-        for i in range(4):
-            self.board.boards[i].box[self.ordre[self.index]].box.background_disabled_normal = "billeNoire.PNG"
-            self.board.boards[i].box[self.ordre[self.index]].box.background_normal = "billeNoire.PNG"
-        
-        if self.index >= 8:
-            Clock.unschedule(self.event_victory)
-        else:
-            self.index += 1
-
 class MyApp(App):
     def build(self):
         return LoginScreen()
 
-print(core.is_won(0b000000001010100001010000001000000000))
+print(core.is_won(0b000000001010100001010000001000000000)) #A SUPPRIMER
 MyApp().run()

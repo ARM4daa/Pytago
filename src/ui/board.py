@@ -96,21 +96,38 @@ class Board:
         self.layout.add_widget(button2)
     
     def win_game(self):
-        """Try victory animation"""
+        """
+        @brief test_game.
+
+        A REMPLIR
+
+        @param self: object of LoginScreen
+        @param instance: A REMPLIR
+        @return None
+        """
+
         self.index = 0
         self.ordre = [6, 3, 0, 1, 2, 5, 8, 7, 4]
         self.event_victory = Clock.schedule_interval(self.test_win, 0.3)
 
     def test_win(self, dt):
-        if Player.player == 0:
-            img = "billeNoire.PNG"
-        else:
-            img = "billeBlanche.PNG"
+        """
+        @brief test_win.
+
+        A REMPLIR
+
+        @param self: object of LoginScreen
+        @param dt: A REMPLIR
+        @return None
+        """
 
         for i in range(4):
-            self.boards[i].box[self.ordre[self.index]].box.background_disabled_normal = img
-            self.boards[i].box[self.ordre[self.index]].box.background_normal = img
-        
+            if not Player.player :
+                self.boards[i].box[self.ordre[self.index]].box.background_disabled_normal = "billeNoire.PNG"
+                self.boards[i].box[self.ordre[self.index]].box.background_normal = "billeNoire.PNG"
+            else :
+                self.boards[i].box[self.ordre[self.index]].box.background_disabled_normal = "billeBlanche.PNG"
+                self.boards[i].box[self.ordre[self.index]].box.background_normal = "billeBlanche.PNG"
         if self.index >= 8:
             Clock.unschedule(self.event_victory)
         else:
