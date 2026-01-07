@@ -15,6 +15,7 @@ from kivy.uix.floatlayout import FloatLayout
 from board import Board
 from kivy.clock import Clock
 from kivy.uix.label import Label
+from player import Player
 "import pytago_core as core"
 "import pytago_ai as ai"
 
@@ -57,7 +58,8 @@ class LoginScreen(FloatLayout):
         @return None
         """
         self.reset(instance)
-        self.board.able_box()
+        Player.player = 0
+        self.board.able_boxes()
 
     def win(self, instance):
         """Try victory animation"""

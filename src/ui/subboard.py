@@ -3,7 +3,7 @@ from player import Player
 from box import Box
 
 class SubBoard:
-    def __init__(self, board_size, pos_x, pos_y, layout, id_board, main_rotate, x_first_box, y_first_box, move, disable_box, able_box, disable_board, able_board, disable_rotate_button, able_rotate_button, main_button1, main_button2):
+    def __init__(self, board_size, pos_x, pos_y, layout, id_board, main_rotate, x_first_box, y_first_box, move, disable_boxes, able_boxes, disable_board, able_board, disable_rotate_button, able_rotate_button, main_button1, main_button2):
         """
         Doc
         """
@@ -20,8 +20,8 @@ class SubBoard:
         self.button1 = main_button1                     #First rotation button (left)
         self.button2 = main_button2                     #Second rotation button (right)
         self.move = move                                #Tuple containing the information transmitted to the bitboard  
-        self.disable_all_boxes = disable_box            #Function associate to any buttons making turn
-        self.able_all_boxes = able_box                  #Function associate to rotation
+        self.disable_all_boxes = disable_boxes            #Function associate to any buttons making turn
+        self.able_all_boxes = able_boxes                  #Function associate to rotation
         self.disable_all_boards= disable_board          #Function associate to any buttons making turn
         self.able_all_boards = able_board               #Function associate to rotation
         self.disable_rotate_button = disable_rotate_button
@@ -56,13 +56,13 @@ class SubBoard:
         self.board.disabled = False
 
 
-    def disable_box(self):
+    def disable_boxes(self):
         """ Disable 9 boxes of the board """
         for i in range(3):
             for j in range(3):
                 self.box[i*3 + j].box.disabled = True
     
-    def able_box(self):
+    def able_boxes(self):
         """ Able 9 boxes of the board """
         for i in range(3):
             for j in range(3):

@@ -2,17 +2,17 @@ from subboard import SubBoard
 from kivy.uix.button import Button
 from player import Player
 from kivy.clock import Clock
-
+ 
 class Board:
     def __init__(self, pos, size, apply_move, selfmain):
         self.move = [0, 0, 0]
         self.button1 = Button(pos=[25, 150], size_hint = [None, None], size = [75, 75])
         self.button2 = Button(pos=[125, 150], size_hint = [None, None], size = [75, 75])
         self.boards = (
-            SubBoard(size, pos[0],          pos[1] + size, selfmain, 0, apply_move, 290, 465, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2), 
-            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, selfmain, 1, apply_move, 540, 465, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
-            SubBoard(size, pos[0],          pos[1],        selfmain, 2, apply_move, 290, 215, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
-            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, apply_move, 540, 215, self.move, self.disable_box, self.able_box, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
+            SubBoard(size, pos[0],          pos[1] + size, selfmain, 0, apply_move, 290, 465, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2), 
+            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, selfmain, 1, apply_move, 540, 465, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
+            SubBoard(size, pos[0],          pos[1],        selfmain, 2, apply_move, 290, 215, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
+            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, apply_move, 540, 215, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
         )
         self.layout = selfmain
 
@@ -21,39 +21,103 @@ class Board:
         #selfmain.add_widget(self.button2)
 
     def able_board(self):
+        """
+        @brief able_board
+
+        The board become clickable
+
+        @param self: object of Board
+        @return None
+        """
         for elt in self.boards:
             elt.able_board()
     
     def disable_board(self):
+        """
+        @brief disable_board
+
+        The board become unclickable
+
+        @param self: object of Board
+        @return None
+        """
         for elt in self.boards:
             elt.disable_board()
     
-    
-    def disable_box(self):
+    def disable_boxes(self):
+        """
+        @brief able_board
+
+        The boxes become unclickable
+
+        @param self: object of Board
+        @return None
+        """
         for elt in self.boards:
-            elt.disable_box()
+            elt.disable_boxes()
     
-    def able_box(self):
+    def able_boxes(self):
+        """
+        @brief able_boxes
+
+        The boxes become clickable
+
+        @param self: object of Board
+        @return None
+        """
         for elt in self.boards:
-            elt.able_box()
+            elt.able_boxes()
 
     def reset_board(self):
+        """
+        @brief reset_board
+
+        The board become blank
+
+        @param self: object of Board
+        @return None
+        """
         for i in range(4):
             self.boards[i].disable_board()
-            self.boards[i].disable_box()
+            self.boards[i].disable_boxes()
             self.boards[i].clear_board()
             
     def disable_rotate_button(self):
+        """
+        @brief disable_rotate_button
+
+        The rotate buttons become unclickable
+
+        @param self: object of Board
+        @return None
+        """
         for elt in self.boards:
             elt.button1.disabled = True
             elt.button2.disabled = True
     
     def able_rotate_button(self):
+        """
+        @brief able_rotate_button
+
+        The rotate buttons become clickable
+
+        @param self: object of Board
+        @return None
+        """
         for elt in self.boards:
             elt.button1.disabled = False
             elt.button2.disabled = False
 
-    def print_button_rotate(self, btn):
+    def print_rotate_button(self, btn):
+        """
+        @brief print_rotate_button
+
+        The rotate buttons become usable
+
+        @param self: object of Board
+        @param btn: button object
+        @return None
+        """
         button1 = Button(text="Gauche", size_hint=(None, None), size=(50, 50), pos = (0, 0))
         button2 = Button(text="Droite", size_hint=(None, None), size=(50, 50), pos = (0, 0))
 
@@ -64,13 +128,30 @@ class Board:
         self.layout.add_widget(button2)
     
     def win_game(self):
+        """
+        @brief win_game
+
+        Displays the victory animation
+
+        @param self: object of Board
+        @return None
+        """
         self.index = 0
         self.ordre = [6, 3, 0, 1, 2, 5, 8, 7, 4]
-        self.event_victory = Clock.schedule_interval(self.test_win, 0.3)
+        self.event_victory = Clock.schedule_interval(self.animation_win, 0.3)
         self.disable_board()
-        self.disable_box()
+        self.disable_boxes()
 
-    def test_win(self, dt):
+    def animation_win(self, dt):
+        """
+        @brief win_game
+
+        Displays the victory animation
+
+        @param self: object of Board
+        @param dt: time (sec)
+        @return None
+        """
         if Player.player == 0:
             img = "billeBlanche.PNG"
         else:
