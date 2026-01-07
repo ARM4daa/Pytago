@@ -1,7 +1,7 @@
-from subboard import SubBoard
+from ui.subboard import SubBoard
 from kivy.uix.button import Button
 from kivy.uix.label import Label
-from player import Player
+from ui.player import Player
 import math
 
 class Board:

@@ -1,4 +1,4 @@
-from player import Player
+from ui.player import Player
 from kivy.uix.button import Button
 from kivy.uix.behaviors import ButtonBehavior
 
