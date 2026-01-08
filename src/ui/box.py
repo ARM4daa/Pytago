@@ -5,7 +5,18 @@ from kivy.uix.behaviors import ButtonBehavior
 class Box(ButtonBehavior):
     def __init__(self, pos_xy, disable_all_boxes, able_all_boards, id_board, id_box, move):
         """
-        Doc
+        @brief __init__
+
+        Constructor of Box
+
+        @param self: Box object
+        @param pos_xy: list with positoin x and y of the Box
+        @param disable_all_boxes: function to disable all boxes on the board 
+        @param able_all_boards: function to able all boxes on the board 
+        @param id_board: specific id of the subboard
+        @param id_box: specific id of the box
+        @param move: list containing the information transmitted to the bitboard
+        @return None
         """
         self.free = True                            #Used to determine whether the square is playable
         
@@ -29,23 +40,31 @@ class Box(ButtonBehavior):
 
         self.id_box = (id_board, id_box)            #Identity of the box on the main board   
 
-        values = {0: 8,
-         1: 4,
-         2: 7,
-         3: 1,
-         4: 0,
-         5: 3,
-         6: 5,
-         7: 2,
-         8: 6}
+        values = {
+            0: 8,
+            1: 4,
+            2: 7,
+            3: 1,
+            4: 0,
+            5: 3,
+            6: 5,
+            7: 2,
+            8: 6
+        }
 
         self.value = 2 ** (values[self.id_box[0]] + (3 - self.id_box[1])*9)
     
     def play(self, instance):
         """
-        Doc
+        @brief play
+
+        Place a marble on a box
+
+        @param self: Box object
+        @param instance: Button object
+        @return None
         """
-        #If a ball isn't in the boxe
+        #If a marble isn't in the box
         if self.free:
             self.free = False
 

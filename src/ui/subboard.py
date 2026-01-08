@@ -17,7 +17,7 @@ class SubBoard:
         @param main_rotate: Rotate function for bitboard
         @param x_first_box: position x of the first box on the subboard
         @param y_first_box: position y of the first box on the subboard
-        @param move: List containing the information transmitted to the bitboard  
+        @param move: list containing the information transmitted to the bitboard  
         @param disable_boxes: function to disable all boxes of the board
         @param able_boxes: function to able all boxes of the board
         @param disable_board: function to disable the board
