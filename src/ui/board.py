@@ -4,21 +4,33 @@ from player import Player
 from kivy.clock import Clock
  
 class Board:
-    def __init__(self, pos, size, apply_move, selfmain):
+    def __init__(self, pos, size, apply_move, layout):
+        """
+        @brief __init__
+
+        Constructor of Board 
+
+        @param self: Board object
+        @param pos: position of Board
+        @param size: size of a subboard
+        @param apply_move: function to apply a move to the bitboard
+        @param layout: LoginScreen object
+        @return None
+        """
         self.move = [0, 0, 0]
         self.button1 = Button(pos=[25, 150], size_hint = [None, None], size = [75, 75])
         self.button2 = Button(pos=[125, 150], size_hint = [None, None], size = [75, 75])
         self.boards = (
-            SubBoard(size, pos[0],          pos[1] + size, selfmain, 0, apply_move, 290, 465, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2), 
-            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, selfmain, 1, apply_move, 540, 465, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
-            SubBoard(size, pos[0],          pos[1],        selfmain, 2, apply_move, 290, 215, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
-            SubBoard(size, pos[0] * 2 - 25, pos[1],        selfmain, 3, apply_move, 540, 215, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
+            SubBoard(size, pos[0],          pos[1] + size, layout, 0, apply_move, 290, 465, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2), 
+            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, layout, 1, apply_move, 540, 465, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
+            SubBoard(size, pos[0],          pos[1],        layout, 2, apply_move, 290, 215, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
+            SubBoard(size, pos[0] * 2 - 25, pos[1],        layout, 3, apply_move, 540, 215, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
         )
-        self.layout = selfmain
+        self.layout = layout
 
         #Si on veut faire des rotations via deux boutons seuls :
-        #selfmain.add_widget(self.button1)
-        #selfmain.add_widget(self.button2)
+        #layout.add_widget(self.button1)
+        #layout.add_widget(self.button2)
 
     def able_board(self):
         """
@@ -26,7 +38,7 @@ class Board:
 
         The board become clickable
 
-        @param self: object of Board
+        @param self: Board object
         @return None
         """
         for elt in self.boards:
@@ -38,7 +50,7 @@ class Board:
 
         The board become unclickable
 
-        @param self: object of Board
+        @param self: Board object
         @return None
         """
         for elt in self.boards:
@@ -50,7 +62,7 @@ class Board:
 
         The boxes become unclickable
 
-        @param self: object of Board
+        @param self: Board object
         @return None
         """
         for elt in self.boards:
@@ -62,7 +74,7 @@ class Board:
 
         The boxes become clickable
 
-        @param self: object of Board
+        @param self: Board object
         @return None
         """
         for elt in self.boards:
@@ -74,7 +86,7 @@ class Board:
 
         The board become blank
 
-        @param self: object of Board
+        @param self: Board object
         @return None
         """
         for i in range(4):
@@ -88,7 +100,7 @@ class Board:
 
         The rotate buttons become unclickable
 
-        @param self: object of Board
+        @param self: Board object
         @return None
         """
         for elt in self.boards:
@@ -101,7 +113,7 @@ class Board:
 
         The rotate buttons become clickable
 
-        @param self: object of Board
+        @param self: Board object
         @return None
         """
         for elt in self.boards:
@@ -114,8 +126,8 @@ class Board:
 
         The rotate buttons become usable
 
-        @param self: object of Board
-        @param btn: button object
+        @param self: Board object
+        @param btn: Button object
         @return None
         """
         button1 = Button(text="Gauche", size_hint=(None, None), size=(50, 50), pos = (0, 0))
@@ -133,7 +145,7 @@ class Board:
 
         Displays the victory animation
 
-        @param self: object of Board
+        @param self: Board object
         @return None
         """
         self.index = 0
@@ -148,7 +160,7 @@ class Board:
 
         Displays the victory animation
 
-        @param self: object of Board
+        @param self: Board object
         @param dt: time (sec)
         @return None
         """
