@@ -168,20 +168,22 @@ class SubBoard:
             self.button2.pos = (self.pos_x + self.board_size, self.pos_y + 200)
             self.button2.background_normal = "Image/arrowR2.PNG"
             self.button2.background_disabled_normal = "Image/arrowR2.PNG"
+
         elif self.id_board == 2:
-            self.button1.pos = (self.pos_x - 50, self.pos_y)
-            self.button1.background_normal = "Image/arrowR3.PNG"
-            self.button1.background_disabled_normal = "Image/arrowR3.PNG"
-            self.button2.pos = (self.pos_x, self.pos_y -50)
-            self.button2.background_normal = "Image/arrowL3.PNG"
-            self.button2.background_disabled_normal = "Image/arrowL3.PNG"
+            self.button1.pos = (self.pos_x, self.pos_y -50)
+            self.button1.background_normal = "Image/arrowL3.PNG"
+            self.button1.background_disabled_normal = "Image/arrowL3.PNG"
+            self.button2.pos = (self.pos_x - 50, self.pos_y)
+            self.button2.background_normal = "Image/arrowR3.PNG"
+            self.button2.background_disabled_normal = "Image/arrowR3.PNG"
+
         else:
-            self.button1.pos = (self.pos_x + self.board_size - 50, self.pos_y - 50)
-            self.button1.background_normal = "Image/arrowR4.PNG"
-            self.button1.background_disabled_normal = "Image/arrowR4.PNG"
-            self.button2.pos = (self.pos_x + self.board_size, self.pos_y)
-            self.button2.background_normal = "Image/arrowL4.PNG"
-            self.button2.background_disabled_normal = "Image/arrowL4.PNG"
+            self.button1.pos = (self.pos_x + self.board_size, self.pos_y)
+            self.button1.background_normal = "Image/arrowL4.PNG"
+            self.button1.background_disabled_normal = "Image/arrowL4.PNG"
+            self.button2.pos = (self.pos_x + self.board_size - 50, self.pos_y - 50)
+            self.button2.background_normal = "Image/arrowR4.PNG"
+            self.button2.background_disabled_normal = "Image/arrowR4.PNG"
 
         self.able_rotate_button()
 
