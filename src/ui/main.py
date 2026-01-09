@@ -33,7 +33,7 @@ class LoginScreen(FloatLayout):
         mode_duo.bind(on_press = lambda x: self.duo_mode_game(x))
         reset_game.bind(on_press = lambda x: self.reset(x))
 
-        self.add_widget(Label(text="--------------- Règles ----------------\nUn tour est décomposé en \ndeux parties : \n- Placer une bille sur une \ncase libre\n- Selectionner un plateau -\nTourner le plateau de son \nchoix\nAlignez 5 billes de la même \ncouleur pour remporter la \nvictoire !", pos=[-315, -125]))
+        self.add_widget(Label(text="--------------- Règles ----------------\nUn tour est décomposé en \ndeux parties : \n- Placer une bille sur une \ncase libre\n- Selectionner un plateau \n- Tourner le plateau de son \nchoix\nAlignez 5 billes de la même \ncouleur pour remporter la \nvictoire !", pos=[-315, -125]))
         self.add_widget(reset_game) 
         self.add_widget(mode_solo)
         self.add_widget(mode_duo)

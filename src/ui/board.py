@@ -180,10 +180,10 @@ class Board:
         @param dt: time (sec)
         @return None
         """
-        if Player.player == 0:
-            img = "Image/whiteMarble.PNG"
-        else:
+        if not Player.player:
             img = "Image/blackMarble.PNG"
+        else:
+            img = "Image/whiteMarble.PNG"
         for i in range(4):
             self.boards[i].box[self.ordre[self.index]].box.background_disabled_normal = img
             self.boards[i].box[self.ordre[self.index]].box.background_normal = img
