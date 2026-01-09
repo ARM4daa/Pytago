@@ -1,3 +1,12 @@
+"""
+@file box.py
+
+@brief Representation of the Box
+
+@section author_sensors Author(s)
+- Created by Léo Ethoré
+"""
+
 from player import Player
 from kivy.uix.button import Button
 from kivy.uix.behaviors import ButtonBehavior
@@ -25,8 +34,8 @@ class Box(ButtonBehavior):
             pos = pos_xy, 
             size = [70, 70],
             size_hint = (None, None), 
-            background_normal = "contour2.PNG",
-            background_disabled_normal = "contour2.PNG",
+            background_normal = "Image/contour2.PNG",
+            background_disabled_normal = "Image/contour2.PNG",
             disabled = True,
             border = [0, 0, 0, 0]
         )
@@ -70,13 +79,13 @@ class Box(ButtonBehavior):
 
             #Player 1
             if Player.player:
-                self.box.background_normal = "billeNoire.PNG"
-                self.box.background_disabled_normal = "billeNoire.PNG"
+                self.box.background_normal = "Image/billeNoire.PNG"
+                self.box.background_disabled_normal = "Image/billeNoire.PNG"
 
             #Player 2
             else:
-                self.box.background_normal = "billeBlanche.PNG"
-                self.box.background_disabled_normal = "billeBlanche.PNG"
+                self.box.background_normal = "Image/billeBlanche.PNG"
+                self.box.background_disabled_normal = "Image/billeBlanche.PNG"
         
             #Gestion of the rest of the turn
             self.disable_all_boxes()

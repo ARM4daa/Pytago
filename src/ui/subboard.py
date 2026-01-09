@@ -1,3 +1,11 @@
+"""
+@file subboard.py
+
+@brief Related to subboard
+
+@section author_sensors Author(s)
+- Created by Léo Ethoré
+"""
 from kivy.uix.button import Button
 from player import Player
 from box import Box
@@ -34,7 +42,7 @@ class SubBoard:
         self.pos_y = pos_y                              
         self.layout_ajout = layout                      
 
-        self.board = Button(pos=[self.pos_x, self.pos_y], size=[self.board_size, self.board_size], size_hint=[None, None], disabled = True, background_normal = "board_wood.PNG", background_disabled_normal = "board_wood.PNG")
+        self.board = Button(pos=[self.pos_x, self.pos_y], size=[self.board_size, self.board_size], size_hint=[None, None], disabled = True, background_normal = "Image/board_wood.PNG", background_disabled_normal = "Image/board_wood.PNG")
         self.board.bind(on_press = lambda x: self.print_button_rotate(x))           
 
         self.id_board = id_board                        
@@ -141,21 +149,39 @@ class SubBoard:
             self.layout_ajout.remove_widget(self.button1)
             self.layout_ajout.remove_widget(self.button2)
 
-        self.button1 = Button(text="Gauche", size_hint=(None, None), size=(50, 50))
-        self.button2 = Button(text="Droite", size_hint=(None, None), size=(50, 50))
+        self.button1 = Button(size_hint=(None, None), size=(50, 50))
+        self.button2 = Button(size_hint=(None, None), size=(50, 50))
 
         if self.id_board == 0:
             self.button1.pos = (self.pos_x - 50, self.pos_y + 200)
+            self.button1.background_normal = "Image/arrowL1.PNG"
+            self.button1.background_disabled_normal = "Image/arrowL1.PNG"
+
             self.button2.pos = (self.pos_x, self.pos_y + 250)
+            self.button2.background_normal = "Image/arrowR1.PNG"
+            self.button2.background_disabled_normal = "Image/arrowR1.PNG"
+
         elif self.id_board == 1:
             self.button1.pos = (self.pos_x + self.board_size - 50, self.pos_y + 250)
+            self.button1.background_normal = "Image/arrowL2.PNG"
+            self.button1.background_disabled_normal = "Image/arrowL2.PNG"
             self.button2.pos = (self.pos_x + self.board_size, self.pos_y + 200)
+            self.button2.background_normal = "Image/arrowR2.PNG"
+            self.button2.background_disabled_normal = "Image/arrowR2.PNG"
         elif self.id_board == 2:
             self.button1.pos = (self.pos_x - 50, self.pos_y)
+            self.button1.background_normal = "Image/arrowR3.PNG"
+            self.button1.background_disabled_normal = "Image/arrowR3.PNG"
             self.button2.pos = (self.pos_x, self.pos_y -50)
+            self.button2.background_normal = "Image/arrowL3.PNG"
+            self.button2.background_disabled_normal = "Image/arrowL3.PNG"
         else:
             self.button1.pos = (self.pos_x + self.board_size - 50, self.pos_y - 50)
+            self.button1.background_normal = "Image/arrowR4.PNG"
+            self.button1.background_disabled_normal = "Image/arrowR4.PNG"
             self.button2.pos = (self.pos_x + self.board_size, self.pos_y)
+            self.button2.background_normal = "Image/arrowL4.PNG"
+            self.button2.background_disabled_normal = "Image/arrowL4.PNG"
 
         self.able_rotate_button()
 
@@ -251,5 +277,5 @@ class SubBoard:
             for j in range(3):
                 self.box[i*3 + j].disabled = True
                 self.box[i*3 + j].free = True
-                self.box[i*3 + j].box.background_normal = "contour2.PNG"
-                self.box[i*3 + j].box.background_disabled_normal = "contour2.PNG"
+                self.box[i*3 + j].box.background_normal = "Image/contour2.PNG"
+                self.box[i*3 + j].box.background_disabled_normal = "Image/contour2.PNG"

@@ -1,3 +1,12 @@
+"""
+@file board.py
+
+@brief Encapsulation of the differents SubBoard
+
+@section author_sensors Author(s)
+- Created by Léo Ethoré
+"""
+
 from subboard import SubBoard
 from kivy.uix.button import Button
 from player import Player
@@ -18,19 +27,15 @@ class Board:
         @return None
         """
         self.move = [0, 0, 0]
-        self.button1 = Button(pos=[25, 150], size_hint = [None, None], size = [75, 75])
-        self.button2 = Button(pos=[125, 150], size_hint = [None, None], size = [75, 75])
+        self.button1 = Button(pos=[50, 150], size_hint = [None, None], size = [75, 75])
+        self.button2 = Button(pos=[150, 150], size_hint = [None, None], size = [75, 75])
         self.boards = (
-            SubBoard(size, pos[0],          pos[1] + size, layout, 0, apply_move, 290, 465, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2), 
-            SubBoard(size, pos[0] * 2 - 25, pos[1] + size, layout, 1, apply_move, 540, 465, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
-            SubBoard(size, pos[0],          pos[1],        layout, 2, apply_move, 290, 215, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
-            SubBoard(size, pos[0] * 2 - 25, pos[1],        layout, 3, apply_move, 540, 215, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
+            SubBoard(size, pos[0],          pos[1] + size, layout, 0, apply_move, 315, 465, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2), 
+            SubBoard(size, pos[0] * 2 - 50, pos[1] + size, layout, 1, apply_move, 565, 465, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
+            SubBoard(size, pos[0],          pos[1],        layout, 2, apply_move, 315, 215, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2),
+            SubBoard(size, pos[0] * 2 - 50, pos[1],        layout, 3, apply_move, 565, 215, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
         )
         self.layout = layout
-
-        #Si on veut faire des rotations via deux boutons seuls :
-        #layout.add_widget(self.button1)
-        #layout.add_widget(self.button2)
 
     def able_board(self):
         """
@@ -119,25 +124,6 @@ class Board:
         for elt in self.boards:
             elt.button1.disabled = False
             elt.button2.disabled = False
-
-    def print_rotate_button(self, btn):
-        """
-        @brief print_rotate_button
-
-        The rotate buttons become usable
-
-        @param self: Board object
-        @param btn: Button object
-        @return None
-        """
-        button1 = Button(text="Gauche", size_hint=(None, None), size=(50, 50), pos = (0, 0))
-        button2 = Button(text="Droite", size_hint=(None, None), size=(50, 50), pos = (0, 0))
-
-        button1.bind(on_press = lambda x: SubBoard.rotate_left(x))
-        button2.bind(on_press = lambda x: SubBoard.rotate_right(x))
-
-        self.layout.add_widget(button1)
-        self.layout.add_widget(button2)
     
     def win_game(self):
         """
