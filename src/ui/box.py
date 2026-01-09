@@ -35,8 +35,8 @@ class Box(ButtonBehavior):
             pos = pos_xy, 
             size = [70, 70],
             size_hint = (None, None), 
-            background_normal = "Image/contour2.PNG",
-            background_disabled_normal = "Image/contour2.PNG",
+            background_normal = "Image/border.PNG",
+            background_disabled_normal = "Image/border.PNG",
             disabled = True,
             border = [0, 0, 0, 0]
         )
@@ -75,15 +75,15 @@ class Box(ButtonBehavior):
         if self.free:
             self.free = False
 
-            #Player 1
-            if Player.player:
-                self.box.background_normal = "Image/billeNoire.PNG"
-                self.box.background_disabled_normal = "Image/billeNoire.PNG"
-
             #Player 2
+            if Player.player:
+                self.box.background_normal = "Image/blackMarble.PNG"
+                self.box.background_disabled_normal = "Image/blackMarble.PNG"
+
+            #Player 1
             else:
-                self.box.background_normal = "Image/billeBlanche.PNG"
-                self.box.background_disabled_normal = "Image/billeBlanche.PNG"
+                self.box.background_normal = "Image/whiteMarble.PNG"
+                self.box.background_disabled_normal = "Image/whiteMarble.PNG"
         
             #Gestion of the rest of the turn
             self.disable_all_boxes()

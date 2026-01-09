@@ -181,9 +181,9 @@ class Board:
         @return None
         """
         if Player.player == 0:
-            img = "billeBlanche.PNG"
+            img = "Image/whiteMarble.PNG"
         else:
-            img = "billeNoire.PNG"
+            img = "Image/blackMarble.PNG"
         for i in range(4):
             self.boards[i].box[self.ordre[self.index]].box.background_disabled_normal = img
             self.boards[i].box[self.ordre[self.index]].box.background_normal = img

@@ -23,9 +23,9 @@ class LoginScreen(FloatLayout):
     def __init__(self, **kwargs):
         super(LoginScreen, self).__init__(**kwargs)
 
-        reset_game = Button(text="Recommencer une partie", pos = [30, 500], size_hint = [None, None], size = [200, 50], background_normal = "Image/fond_test.PNG")
-        mode_solo = Button(text="Jouer en solo", pos = [30, 425], size_hint = [None, None], size = [200, 50], background_normal = "Image/fond_test.PNG")
-        mode_duo = Button(text="Jouer à 2", pos = [30, 350], size_hint = [None, None], size = [200, 50], background_normal = "Image/fond_test.PNG")
+        reset_game = Button(text="Recommencer une partie", pos = [30, 500], size_hint = [None, None], size = [200, 50], background_normal = "Image/buttonBackground.PNG")
+        mode_solo = Button(text="Jouer en solo", pos = [30, 425], size_hint = [None, None], size = [200, 50], background_normal = "Image/buttonBackground.PNG")
+        mode_duo = Button(text="Jouer à 2", pos = [30, 350], size_hint = [None, None], size = [200, 50], background_normal = "Image/buttonBackground.PNG")
         
         self.board = Board([300, 50], 250, self.play, self)
 
@@ -42,7 +42,7 @@ class LoginScreen(FloatLayout):
         self.bitboard_opp = 0
         self.single_player = False
         self.ai_to_play = False
-        self.level = 7
+        self.level = 3
         self.recursion = False
     
     def run_game(self, instance):

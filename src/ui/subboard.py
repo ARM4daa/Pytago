@@ -42,7 +42,7 @@ class SubBoard:
         self.pos_y = pos_y                              
         self.layout_ajout = layout                      
 
-        self.board = Button(pos=[self.pos_x, self.pos_y], size=[self.board_size, self.board_size], size_hint=[None, None], disabled = True, background_normal = "Image/board_wood.PNG", background_disabled_normal = "Image/board_wood.PNG")
+        self.board = Button(pos=[self.pos_x, self.pos_y], size=[self.board_size, self.board_size], size_hint=[None, None], disabled = True, background_normal = "Image/board_wood.PNG", background_disabled_normal = "Image/boardWood.PNG")
         self.board.bind(on_press = lambda x: self.print_button_rotate(x))           
 
         self.id_board = id_board                        
@@ -281,5 +281,5 @@ class SubBoard:
             for j in range(3):
                 self.box[i*3 + j].disabled = True
                 self.box[i*3 + j].free = True
-                self.box[i*3 + j].box.background_normal = "Image/contour2.PNG"
-                self.box[i*3 + j].box.background_disabled_normal = "Image/contour2.PNG"
+                self.box[i*3 + j].box.background_normal = "Image/border.PNG"
+                self.box[i*3 + j].box.background_disabled_normal = "Image/border.PNG"
