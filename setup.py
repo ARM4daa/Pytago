@@ -13,8 +13,7 @@ module = Extension(
         "-march=native",
         "-mtune=native",
         "-flto",
-        "-funroll-loops",
-        "-ffast-math",
+        "-funroll-loops"
     ],
     extra_link_args=["-flto"],
 )
@@ -39,8 +38,7 @@ module = Extension(
         "-march=native",
         "-mtune=native",
         "-flto",
-        "-funroll-loops",
-        "-ffast-math",
+        "-funroll-loops"
     ],
     extra_link_args=["-flto"],
 )

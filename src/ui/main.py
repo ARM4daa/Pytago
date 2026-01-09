@@ -3,9 +3,6 @@
 
 @brief Create the link between GUI and bitboards.
 
-@section author_sensors Author(s)
-- Created by Baptiste Farcy
-
 """
 
 from kivy.app import App
@@ -16,10 +13,11 @@ from kivy.uix.label import Label
 from kivy.config import Config
 Config.set('graphics', 'width', '900') 
 Config.set('graphics', 'height', '600')
+from time import sleep
 from player import Player
 
-"import pytago_core as core"
-"import pytago_ai as ai"
+import pytago_core as core
+import pytago_ai as ai
 
 class LoginScreen(FloatLayout):
     def __init__(self, **kwargs):
@@ -31,7 +29,8 @@ class LoginScreen(FloatLayout):
         
         self.board = Board([300, 50], 250, self.play, self)
 
-        mode_duo.bind(on_press = lambda x: self.run_game(x))
+        mode_solo.bind(on_press = lambda x: self.solo_mode_game(x))
+        mode_duo.bind(on_press = lambda x: self.duo_mode_game(x))
         reset_game.bind(on_press = lambda x: self.reset(x))
 
         self.add_widget(Label(text="--------------- Règles ----------------\nUn tour est décomposé en \ndeux parties : \n- Placer une bille sur une \ncase libre\n- Selectionner un plateau -\nTourner le plateau de son \nchoix\nAlignez 5 billes de la même \ncouleur pour remporter la \nvictoire !", pos=[-315, -125]))
@@ -43,7 +42,8 @@ class LoginScreen(FloatLayout):
         self.bitboard_opp = 0
         self.single_player = False
         self.ai_to_play = False
-        self.level = 1
+        self.level = 7
+        self.recursion = False
     
     def run_game(self, instance):
 
@@ -59,6 +59,36 @@ class LoginScreen(FloatLayout):
         self.reset(instance)
         Player.player = 0
         self.board.able_boxes()
+
+    def solo_mode_game(self, instance):
+        """
+        @brief solo_mode_game.
+
+        This function is launching when the player want to play solo againdt an ia.
+        It define the variable "single_player" to true.      
+
+        @param self: object of LoginScreen
+        @param instance: A REMPLIR
+        @return None
+        """
+
+        self.single_player = True
+        self.run_game(instance)
+
+    def duo_mode_game(self, instance):
+        """
+        @brief duo_mode_game.
+
+        This function is launching when two player want to play together.
+        It define the variable "single_player" to false. 
+
+        @param self: object of LoginScreen
+        @param instance: A REMPLIR
+        @return None
+        """
+
+        self.single_player = False
+        self.run_game(instance)
 
     def reset(self, instance):
         """
@@ -86,17 +116,35 @@ class LoginScreen(FloatLayout):
         @return None
         """
 
+        "print(bin(self.bitboard_me)[2:].zfill(36))"
         self.bitboard_me = core.place_marble(self.bitboard_me, move[0])
-        if core.is_won(self.bitboard_me):
-            self.board.win_game()
+        print(move)
+        if move[2]:
+            self.bitboard_me = core.rotate_board_clockwise(self.bitboard_me, move[1])
+            self.bitboard_opp = core.rotate_board_clockwise(self.bitboard_opp, move[1])
         else:
-            if self.board.move[2]:
-                core.rotate_board_clockwise(self.bitboard_me, move[1])
-                core.rotate_board_clockwise(self.bitboard_opp, move[1])
-            else:
-                core.rotate_board_aclockwise(self.bitboard_me, move[1])
-                core.rotate_board_aclockwise(self.bitboard_opp, move[1])
-            self.bitboard_me, self.bitboard_opp = self.bitboard_opp, self.bitboard_me
+            self.bitboard_me = core.rotate_board_aclockwise(self.bitboard_me, move[1])
+            self.bitboard_opp = core.rotate_board_aclockwise(self.bitboard_opp, move[1])
+        """
+        print("me : ", end="")
+        print(bin(self.bitboard_me)[2:].zfill(36), end=": ")
+        print(core.is_won(self.bitboard_me))
+        print("opp: ", end="")
+        print(bin(self.bitboard_opp)[2:].zfill(36), end=": ")
+        print(core.is_won(self.bitboard_opp))
+        print()
+        """
+        if core.is_won(self.bitboard_me):
+            print("winnnn") #A SUPPRIMER
+            sleep(1)
+            self.board.win_game()
+            return 1
+        if core.is_won(self.bitboard_opp):
+            sleep(1)
+            Player.player = 0 if Player.player else 1
+            self.board.win_game()
+            return 1
+        self.bitboard_me, self.bitboard_opp = self.bitboard_opp, self.bitboard_me
         
     def play(self):
         """
@@ -109,13 +157,25 @@ class LoginScreen(FloatLayout):
         @param self: object of LoginScreen
         @return None
         """
+
+        if self.recursion :
+            return None
         if self.single_player:
             if self.ai_to_play:
+                print(self.level)
+                print(bin(self.bitboard_me)[2:].zfill(36))
+                print(bin(self.bitboard_opp)[2:].zfill(36))
                 best = ai.get_best_move(self.bitboard_me, self.bitboard_opp, self.level)
                 self.apply_move(best)
+                self.recursion = True
+                self.board.apply_move(best)
+                self.recursion = False
+                self.ai_to_play = False
             else:
-                self.apply_move(self.board.move)
-            self.ai_to_play = not self.ai_to_play
+                won = self.apply_move(self.board.move)
+                if not won:
+                    self.ai_to_play = True
+                    self.play()
         else:
             self.apply_move(self.board.move)
 

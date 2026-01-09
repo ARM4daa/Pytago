@@ -223,10 +223,11 @@ class SubBoard:
 
         #Used to turn management
         Player.player = (Player.player + 1) % 2                 #Move to the oser player
-        self.move = (self.id_board, 1)                          #Modify value for the bitboard
+        self.move[1:3] = (self.id_board, 0)                     #Modify value for the bitboard
         self.disable_all_boards()                               #Deactivates the boards
         self.able_all_boxes()                                   #Activates the squares 
         self.disable_rotate_button()
+        self.handler_rotate()
 
     def rotate_right(self, instance):
         """
@@ -259,10 +260,11 @@ class SubBoard:
 
         #Used to turn management
         Player.player = (Player.player + 1) % 2                 #Move to the oser player
-        self.move = (self.id_board, 0)                          #Modify value for the bitboard
+        self.move[1:3] = (self.id_board, 1)                     #Modify value for the bitboard
         self.disable_all_boards()                               #Deactivates the boards
         self.able_all_boxes()                                   #Activates the squares 
         self.disable_rotate_button()
+        self.handler_rotate()
 
     def clear_board(self):
         """
