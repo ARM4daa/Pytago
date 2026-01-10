@@ -37,7 +37,8 @@ class Board:
             SubBoard(size, pos[0] * 2 - 50, pos[1],        layout, 3, apply_move, 565, 215, self.move, self.disable_boxes, self.able_boxes, self.disable_board, self.able_board, self.disable_rotate_button, self.able_rotate_button, self.button1, self.button2)
         )
         self.layout = layout
-                
+
+        #This dictionnary is used to associate a case to a power of 2
         self.values_reverse = {8: 0,
          4: 1,
          7: 2,
@@ -60,7 +61,9 @@ class Board:
         @return None
         """
 
+        #The next line is used to transform a power of 2 gives by the bitboard to a case of the game board
         values = (int(3-math.log2(move[0])//9), self.values_reverse[math.log2(move[0])%9])
+
         self.boards[values[0]].box[values[1]].play(None)
         if move[2] :
             self.boards[move[1]].rotate_right(None)

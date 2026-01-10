@@ -3,6 +3,8 @@
 
 @brief Create the link between GUI and bitboards.
 
+@section author_sensors Author(s)
+- Created by Baptiste Farcy
 """
 
 from kivy.app import App
@@ -42,7 +44,7 @@ class LoginScreen(FloatLayout):
         self.bitboard_opp = 0
         self.single_player = False
         self.ai_to_play = False
-        self.level = 3
+        self.level = 6
         self.recursion = False
     
     def run_game(self, instance):
@@ -56,6 +58,7 @@ class LoginScreen(FloatLayout):
         @param instance: button object
         @return None
         """
+
         self.reset(instance)
         Player.player = 0
         self.board.able_boxes()
@@ -116,34 +119,26 @@ class LoginScreen(FloatLayout):
         @return None
         """
 
-        "print(bin(self.bitboard_me)[2:].zfill(36))"
         self.bitboard_me = core.place_marble(self.bitboard_me, move[0])
-        print(move)
+
         if move[2]:
             self.bitboard_me = core.rotate_board_clockwise(self.bitboard_me, move[1])
             self.bitboard_opp = core.rotate_board_clockwise(self.bitboard_opp, move[1])
         else:
             self.bitboard_me = core.rotate_board_aclockwise(self.bitboard_me, move[1])
             self.bitboard_opp = core.rotate_board_aclockwise(self.bitboard_opp, move[1])
-        """
-        print("me : ", end="")
-        print(bin(self.bitboard_me)[2:].zfill(36), end=": ")
-        print(core.is_won(self.bitboard_me))
-        print("opp: ", end="")
-        print(bin(self.bitboard_opp)[2:].zfill(36), end=": ")
-        print(core.is_won(self.bitboard_opp))
-        print()
-        """
+
         if core.is_won(self.bitboard_me):
-            print("winnnn") #A SUPPRIMER
-            sleep(1)
+            sleep(2)
             self.board.win_game()
             return 1
+        
         if core.is_won(self.bitboard_opp):
-            sleep(1)
+            sleep(2)
             Player.player = 0 if Player.player else 1
             self.board.win_game()
             return 1
+        
         self.bitboard_me, self.bitboard_opp = self.bitboard_opp, self.bitboard_me
         
     def play(self):
@@ -162,9 +157,6 @@ class LoginScreen(FloatLayout):
             return None
         if self.single_player:
             if self.ai_to_play:
-                print(self.level)
-                print(bin(self.bitboard_me)[2:].zfill(36))
-                print(bin(self.bitboard_opp)[2:].zfill(36))
                 best = ai.get_best_move(self.bitboard_me, self.bitboard_opp, self.level)
                 self.apply_move(best)
                 self.recursion = True

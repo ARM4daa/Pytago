@@ -46,6 +46,9 @@ class Box(ButtonBehavior):
         self.disable_all_boxes = disable_all_boxes              
         self.able_all_boards = able_all_boards  
 
+    
+        #The next part is used to transform a case from a board to a power of 2 sends to the bitboard
+        
         self.move = move
 
         values = {0: 8,
