@@ -1,0 +1,47 @@
+/**
+ * @main_page
+ * 
+ * Pytago is a project to recreate the board game named ‘Pentago’.
+ * Our objective was to implement the complete game logic with a graphical interface and the possibility to play against an AI and to play against an other player
+ * 
+ * We have separate the project in two part :
+ * 
+ * - The module Python ‘Kivy’ to manage the graphic interface
+ * - The language Python to manage the game logic and the C to create the AI.
+ * 
+ * We choose Kivy because it’s easy to learn, the documentation is good and easier to handle for the compilation on multiple platforms.
+ * 
+ * 
+ * In the GUI :
+ * 
+ * With Kivy we made the graphic interface to able the player to interact with the game.
+ * Many file create the entire of the GUI.
+ * ‘board.py’ models the main board who contains the four subboards. It controls the win animation and apply a move on the board visually. It gives the equation to transform a power of two in a box_id
+ * ‘subboard.py’ defines the four subboards independently. They contains 3 lines and 3 columns of ‘box’ instance from the ‘box.py’.
+ * ‘box.py’ identifies each area where a marble is droppable. It gives the equation to transform a box_id in a power of 2.
+ * ‘player.py’ this file manage the player who is playing during the game.
+ * ‘main.py’ is the most important file because it make the link between the game logic, the AI and the GUI. 
+ * - At the level of the graphic interface, this file defines all the button, the function associate at each button. It print the rules.
+ * - It manages the level of AI choose by the player with the graphic interface.
+ * - It launches the game depending on the game mode selected by the player.
+ * - It can reset the bitboards and the board at the end of a game.
+ * - It calls the function to modify the bitboards and the board when a marble is place or a board is rotate.
+ * - It handles the function to verify the win condition with the masks predefine in the core files.
+ * - It collects the best move calculate by the AI (in solo mode) and apply it on the board and bitboards.
+ * - It manages the game turn and define the player is playing during a turn.
+ * 
+ * 
+ * In the core and AI :
+ * 
+ * This module implements the critical C core of the Pytago AI to maximize search performance, while the rest of the project (interface, high-level logic, game management) is built in Python using the CPython C API.
+ * 
+ * CPU-intensive parts (position evaluation, NegaMax, transposition table, move generation) are written in C to leverage low-level operations, 64-bit integers, and built-in functions like __builtin_popcountll, while Python orchestrates the game through a compiled extension module (.pyd/.so). 
+ * 
+ * The hexagonal board is encoded in optimized 64-bit bitboards for each player, with precomputed win masks (WIN_MASKS) enabling ultra-fast alignment tests via AND + popcount.
+ * We choose to implement the boards states with bitboards.
+ * We organize the bit layout to enable more efficient operations such as rotating a board.
+ * 
+ * The AI uses NegaMax with alpha-beta pruning, a 4M-entry transposition table with Knuth hashing and bound flags (EXACT/LOWERBOUND/UPPERBOUND), and iterative deepening that progressively searches deeper while reusing the TT to order moves via descending qsort(), generating up to 288 maximum moves (36 positions × 4 quadrants × 2 directions).
+ * 
+ * Technologies include Python (application logic), C (AI engine), CPython API (native extension), optimized bitboards, GCC/Clang intrinsics (popcountll), and ‘setup.py’ for cross-platform Windows/Linux compilation. This architecture separates C performance from Python ergonomics while delivering a robust AI capable of exploring deep game trees with efficient pruning and intelligent position memoization.
+*/
