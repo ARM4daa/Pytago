@@ -1,5 +1,5 @@
 /**
- * @main_page
+ * @mainpage Pytago
  * 
  * Pytago is a project to recreate the board game named ‘Pentago’.
  * Our objective was to implement the complete game logic with a graphical interface and the possibility to play against an AI and to play against an other player
