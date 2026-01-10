@@ -6,16 +6,10 @@ Pytago is a Python-based implementation of the [Pytago](https://en.wikipedia.org
 
 The board logic has been aggressively optimized, both technically and algorithmically. The game state is represented internally as a 36-bit bitboard, with a unique bit layout that enables ultra-efficient quadrant rotations.
 
-## Visuals
-
 ## Installation
 
-## Usage
+Pytago is Python-only for now. To use it, go to the src directory and run `pip install -e .` to compile and install the AI. Then run `python3 main.py` and enjoy!
 
 ## Roadmap
 
 If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## License
-
-For open source projects, say how it is licensed.
