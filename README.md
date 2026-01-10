@@ -12,6 +12,7 @@ The board logic has been aggressively optimized, both technically and algorithmi
 ## Installation
 
 Pytago is Python-only for now. To use it, go to the src directory and run `pip install -e .` to compile and install the AI. Then run `python3 main.py` and enjoy!
+For Android, run `buildozer android debug` in the root directory. The APK will be in bin/.
 
 ## Roadmap
 
