@@ -56,12 +56,31 @@ class LoginScreen(FloatLayout):
         self.add_widget(self.level_ai_label)
 
     def level_ia_add(self, instance):
+        """
+        @brief level_ia_add.
+
+        Increase the level of AI.
+
+        @param self: object of LoginScreen
+        @param instance: button object
+        @return None
+        """
         if self.level < 6:
             self.level += 1
             self.level_ai_label.text = str(self.level)
             
     
     def level_ia_sub(self, instance):
+        """
+        @brief level_ia_sub.
+
+        Decrease the level of AI.
+
+        @param self: object of LoginScreen
+        @param instance: button object
+        @return None
+        """
+
         if self.level > 1:
             self.level -= 1
             self.level_ai_label.text = str(self.level)
