@@ -13,10 +13,15 @@ from kivy.uix.floatlayout import FloatLayout
 from ui.board import Board
 from kivy.uix.label import Label
 from kivy.config import Config
+from kivy.resources import resource_find, resource_add_path
 from time import sleep
 from ui.player import Player
 import wrappers.pytago_core as core
 import wrappers.pytago_ai as ai
+
+
+resource_add_path("assets")
+resource_add_path("data")
 
 #Window config
 Config.set('graphics', 'width', '900') 
@@ -27,11 +32,11 @@ class LoginScreen(FloatLayout):
     def __init__(self, **kwargs):
         super(LoginScreen, self).__init__(**kwargs)
 
-        reset_game = Button(text="Recommencer une partie", pos = [30, 500], size_hint = [None, None], size = [200, 50], background_normal = "Image/buttonBackground.PNG")
-        mode_solo = Button(text="Jouer en solo", pos = [30, 425], size_hint = [None, None], size = [200, 50], background_normal = "Image/buttonBackground.PNG")
-        mode_duo = Button(text="Jouer à 2", pos = [30, 275], size_hint = [None, None], size = [200, 50], background_normal = "Image/buttonBackground.PNG")
-        self.level_ai_more = Button(text='+', pos = [140,340], size_hint = [None, None], size = [50, 50], background_normal = "Image/buttonBackground.PNG")
-        self.level_ai_less = Button(text='-', pos = [70,340], size_hint = [None, None], size = [50, 50], background_normal = "Image/buttonBackground.PNG")
+        reset_game = Button(text="Recommencer une partie", pos = [30, 500], size_hint = [None, None], size = [200, 50], background_normal = resource_find("Image/buttonBackground.PNG"))
+        mode_solo = Button(text="Jouer en solo", pos = [30, 425], size_hint = [None, None], size = [200, 50], background_normal = resource_find("Image/buttonBackground.PNG"))
+        mode_duo = Button(text="Jouer à 2", pos = [30, 275], size_hint = [None, None], size = [200, 50], background_normal = resource_find("Image/buttonBackground.PNG"))
+        self.level_ai_more = Button(text='+', pos = [140,340], size_hint = [None, None], size = [50, 50], background_normal = resource_find("Image/buttonBackground.PNG"))
+        self.level_ai_less = Button(text='-', pos = [70,340], size_hint = [None, None], size = [50, 50], background_normal = resource_find("Image/buttonBackground.PNG"))
         self.board = Board([300, 50], 250, self.play, self)
 
         mode_solo.bind(on_press = lambda x: self.solo_mode_game(x))
@@ -114,7 +119,7 @@ class LoginScreen(FloatLayout):
         It define the variable "single_player" to true.      
 
         @param self: object of LoginScreen
-        @param instance: A REMPLIR
+        @param instance
         @return None
         """
 
@@ -129,7 +134,7 @@ class LoginScreen(FloatLayout):
         It define the variable "single_player" to false. 
 
         @param self: object of LoginScreen
-        @param instance: A REMPLIR
+        @param instance
         @return None
         """
 
@@ -219,7 +224,9 @@ class LoginScreen(FloatLayout):
 
 class Pytago(App):
     def build(self):
-        self.icon = "Image/marbles.png"
+        self.icon = resource_find("Image/marbles.png")
         return LoginScreen()
 
-Pytago().run()
+
+def main():
+    Pytago().run()

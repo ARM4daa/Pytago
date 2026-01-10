@@ -11,6 +11,7 @@ from ui.subboard import SubBoard
 from kivy.uix.button import Button
 from ui.player import Player
 from kivy.clock import Clock
+from kivy.resources import resource_find
 import math
  
 class Board:
@@ -182,9 +183,9 @@ class Board:
         @return None
         """
         if not Player.player:
-            img = "Image/blackMarble.PNG"
+            img = resource_find("Image/blackMarble.PNG")
         else:
-            img = "Image/whiteMarble.PNG"
+            img = resource_find("Image/whiteMarble.PNG")
         for i in range(4):
             self.boards[i].box[self.ordre[self.index]].box.background_disabled_normal = img
             self.boards[i].box[self.ordre[self.index]].box.background_normal = img

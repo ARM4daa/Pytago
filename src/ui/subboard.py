@@ -9,6 +9,7 @@
 from kivy.uix.button import Button
 from ui.player import Player
 from ui.box import Box
+from kivy.resources import resource_find
 
 class SubBoard:
     def __init__(self, board_size, pos_x, pos_y, layout, id_board, main_rotate, x_first_box, y_first_box, move, disable_boxes, able_boxes, disable_board, able_board, disable_rotate_button, able_rotate_button, main_button1, main_button2):
@@ -42,7 +43,7 @@ class SubBoard:
         self.pos_y = pos_y                              
         self.layout_ajout = layout                      
 
-        self.board = Button(pos=[self.pos_x, self.pos_y], size=[self.board_size, self.board_size], size_hint=[None, None], disabled = True, background_normal = "Image/boardWood.PNG", background_disabled_normal = "Image/boardWood.PNG")
+        self.board = Button(pos=[self.pos_x, self.pos_y], size=[self.board_size, self.board_size], size_hint=[None, None], disabled = True, background_normal = resource_find("Image/boardWood.PNG"), background_disabled_normal = resource_find("Image/boardWood.PNG"))
         self.board.bind(on_press = lambda x: self.print_button_rotate(x))           
 
         self.id_board = id_board                        
@@ -154,36 +155,36 @@ class SubBoard:
 
         if self.id_board == 0:
             self.button1.pos = (self.pos_x - 50, self.pos_y + 200)
-            self.button1.background_normal = "Image/arrowL1.PNG"
-            self.button1.background_disabled_normal = "Image/arrowL1.PNG"
+            self.button1.background_normal = resource_find("Image/arrowL1.PNG")
+            self.button1.background_disabled_normal = resource_find("Image/arrowL1.PNG")
 
             self.button2.pos = (self.pos_x, self.pos_y + 250)
-            self.button2.background_normal = "Image/arrowR1.PNG"
-            self.button2.background_disabled_normal = "Image/arrowR1.PNG"
+            self.button2.background_normal = resource_find("Image/arrowR1.PNG")
+            self.button2.background_disabled_normal = resource_find("Image/arrowR1.PNG")
 
         elif self.id_board == 1:
             self.button1.pos = (self.pos_x + self.board_size - 50, self.pos_y + 250)
-            self.button1.background_normal = "Image/arrowL2.PNG"
-            self.button1.background_disabled_normal = "Image/arrowL2.PNG"
+            self.button1.background_normal = resource_find("Image/arrowL2.PNG")
+            self.button1.background_disabled_normal = resource_find("Image/arrowL2.PNG")
             self.button2.pos = (self.pos_x + self.board_size, self.pos_y + 200)
-            self.button2.background_normal = "Image/arrowR2.PNG"
-            self.button2.background_disabled_normal = "Image/arrowR2.PNG"
+            self.button2.background_normal = resource_find("Image/arrowR2.PNG")
+            self.button2.background_disabled_normal = resource_find("Image/arrowR2.PNG")
 
         elif self.id_board == 2:
             self.button1.pos = (self.pos_x, self.pos_y -50)
-            self.button1.background_normal = "Image/arrowL3.PNG"
-            self.button1.background_disabled_normal = "Image/arrowL3.PNG"
+            self.button1.background_normal = resource_find("Image/arrowL3.PNG")
+            self.button1.background_disabled_normal = resource_find("Image/arrowL3.PNG")
             self.button2.pos = (self.pos_x - 50, self.pos_y)
-            self.button2.background_normal = "Image/arrowR3.PNG"
-            self.button2.background_disabled_normal = "Image/arrowR3.PNG"
+            self.button2.background_normal = resource_find("Image/arrowR3.PNG")
+            self.button2.background_disabled_normal = resource_find("Image/arrowR3.PNG")
 
         else:
             self.button1.pos = (self.pos_x + self.board_size, self.pos_y)
-            self.button1.background_normal = "Image/arrowL4.PNG"
-            self.button1.background_disabled_normal = "Image/arrowL4.PNG"
+            self.button1.background_normal = resource_find("Image/arrowL4.PNG")
+            self.button1.background_disabled_normal = resource_find("Image/arrowL4.PNG")
             self.button2.pos = (self.pos_x + self.board_size - 50, self.pos_y - 50)
-            self.button2.background_normal = "Image/arrowR4.PNG"
-            self.button2.background_disabled_normal = "Image/arrowR4.PNG"
+            self.button2.background_normal = resource_find("Image/arrowR4.PNG")
+            self.button2.background_disabled_normal = resource_find("Image/arrowR4.PNG")
 
         self.able_rotate_button()
 
@@ -281,5 +282,5 @@ class SubBoard:
             for j in range(3):
                 self.box[i*3 + j].disabled = True
                 self.box[i*3 + j].free = True
-                self.box[i*3 + j].box.background_normal = "Image/border.PNG"
-                self.box[i*3 + j].box.background_disabled_normal = "Image/border.PNG"
+                self.box[i*3 + j].box.background_normal = resource_find("Image/border.PNG")
+                self.box[i*3 + j].box.background_disabled_normal = resource_find("Image/border.PNG")

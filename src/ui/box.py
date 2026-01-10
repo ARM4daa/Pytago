@@ -10,6 +10,7 @@
 from ui.player import Player
 from kivy.uix.button import Button
 from kivy.uix.behaviors import ButtonBehavior
+from kivy.resources import resource_find
 from time import sleep
 
 class Box(ButtonBehavior):
@@ -35,8 +36,8 @@ class Box(ButtonBehavior):
             pos = pos_xy, 
             size = [70, 70],
             size_hint = (None, None), 
-            background_normal = "Image/border.PNG",
-            background_disabled_normal = "Image/border.PNG",
+            background_normal = resource_find("Image/border.PNG"),
+            background_disabled_normal = resource_find("Image/border.PNG"),
             disabled = True,
             border = [0, 0, 0, 0]
         )
@@ -80,13 +81,13 @@ class Box(ButtonBehavior):
 
             #Player 2
             if Player.player:
-                self.box.background_normal = "Image/blackMarble.PNG"
-                self.box.background_disabled_normal = "Image/blackMarble.PNG"
+                self.box.background_normal = resource_find("Image/blackMarble.PNG")
+                self.box.background_disabled_normal = resource_find("Image/blackMarble.PNG")
 
             #Player 1
             else:
-                self.box.background_normal = "Image/whiteMarble.PNG"
-                self.box.background_disabled_normal = "Image/whiteMarble.PNG"
+                self.box.background_normal = resource_find("Image/whiteMarble.PNG")
+                self.box.background_disabled_normal = resource_find("Image/whiteMarble.PNG")
         
             #Gestion of the rest of the turn
             self.disable_all_boxes()
