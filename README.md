@@ -1,5 +1,8 @@
 # Pytago
 
+Link to the GitLab : https://forgens.univ-ubs.fr/gitlab/e2400527/pytago 
+Link to the Kanban : https://forgens.univ-ubs.fr/gitlab/e2400527/pytago/-/boards 
+
 ## Description
 
 Pytago is a Python-based implementation of the [Pytago](https://en.wikipedia.org/wiki/Pentago) game. The graphical user interface is built with Kivy, while the AI and core game logic are implemented in C for maximum performance.
