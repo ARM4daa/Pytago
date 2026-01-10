@@ -10,13 +10,13 @@
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
-from board import Board
+from ui.board import Board
 from kivy.uix.label import Label
 from kivy.config import Config
 from time import sleep
-from player import Player
-import pytago_core as core
-import pytago_ai as ai
+from ui.player import Player
+import wrappers.pytago_core as core
+import wrappers.pytago_ai as ai
 
 #Window config
 Config.set('graphics', 'width', '900') 

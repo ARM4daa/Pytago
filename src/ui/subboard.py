@@ -7,8 +7,8 @@
 - Created by Léo Ethoré
 """
 from kivy.uix.button import Button
-from player import Player
-from box import Box
+from ui.player import Player
+from ui.box import Box
 
 class SubBoard:
     def __init__(self, board_size, pos_x, pos_y, layout, id_board, main_rotate, x_first_box, y_first_box, move, disable_boxes, able_boxes, disable_board, able_board, disable_rotate_button, able_rotate_button, main_button1, main_button2):

@@ -7,9 +7,9 @@
 - Created by Léo Ethoré
 """
 
-from subboard import SubBoard
+from ui.subboard import SubBoard
 from kivy.uix.button import Button
-from player import Player
+from ui.player import Player
 from kivy.clock import Clock
 import math
  
