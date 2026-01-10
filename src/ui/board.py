@@ -170,12 +170,10 @@ class Board:
         self.index = 0
         self.ordre = [6, 3, 0, 1, 2, 5, 8, 7, 4]
         self.event_victory = Clock.schedule_interval(self.animation_win, 0.3)
-        self.disable_board()
-        self.disable_boxes()
 
     def animation_win(self, dt):
         """
-        @brief win_game
+        @brief animation_win
 
         Displays the victory animation
 
@@ -195,3 +193,7 @@ class Board:
             Clock.unschedule(self.event_victory)
         else:
             self.index += 1
+
+        self.disable_board()
+        self.disable_boxes()
+        

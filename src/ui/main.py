@@ -13,13 +13,15 @@ from kivy.uix.floatlayout import FloatLayout
 from board import Board
 from kivy.uix.label import Label
 from kivy.config import Config
-Config.set('graphics', 'width', '900') 
-Config.set('graphics', 'height', '600')
 from time import sleep
 from player import Player
+import pytago_core as core
+import pytago_ai as ai
 
-"import pytago_core as core"
-"import pytago_ai as ai"
+#Window config
+Config.set('graphics', 'width', '900') 
+Config.set('graphics', 'height', '600')
+Config.set('graphics', 'resizable', '0')
 
 class LoginScreen(FloatLayout):
     def __init__(self, **kwargs):
@@ -28,15 +30,15 @@ class LoginScreen(FloatLayout):
         reset_game = Button(text="Recommencer une partie", pos = [30, 500], size_hint = [None, None], size = [200, 50], background_normal = "Image/buttonBackground.PNG")
         mode_solo = Button(text="Jouer en solo", pos = [30, 425], size_hint = [None, None], size = [200, 50], background_normal = "Image/buttonBackground.PNG")
         mode_duo = Button(text="Jouer à 2", pos = [30, 275], size_hint = [None, None], size = [200, 50], background_normal = "Image/buttonBackground.PNG")
-        level_ai_more = Button(text='+', pos = [140,350], size_hint = [None, None], size = [50, 50], background_normal = "Image/buttonBackground.PNG")
-        level_ai_less = Button(text='-', pos = [70,350], size_hint = [None, None], size = [50, 50], background_normal = "Image/buttonBackground.PNG")
+        self.level_ai_more = Button(text='+', pos = [140,340], size_hint = [None, None], size = [50, 50], background_normal = "Image/buttonBackground.PNG")
+        self.level_ai_less = Button(text='-', pos = [70,340], size_hint = [None, None], size = [50, 50], background_normal = "Image/buttonBackground.PNG")
         self.board = Board([300, 50], 250, self.play, self)
 
         mode_solo.bind(on_press = lambda x: self.solo_mode_game(x))
         mode_duo.bind(on_press = lambda x: self.duo_mode_game(x))
         reset_game.bind(on_press = lambda x: self.reset(x))
-        level_ai_less.bind(on_press = lambda x: self.level_ia_sub(x))
-        level_ai_more.bind(on_press = lambda x: self.level_ia_add(x))
+        self.level_ai_less.bind(on_press = lambda x: self.level_ia_sub(x))
+        self.level_ai_more.bind(on_press = lambda x: self.level_ia_add(x))
 
         self.bitboard_me = 0
         self.bitboard_opp = 0
@@ -44,15 +46,15 @@ class LoginScreen(FloatLayout):
         self.ai_to_play = False
         self.level = 6
         self.recursion = False
-        self.level_ai_label = Label(text =f"{self.level}", pos =[-320, 75])
+        self.level_ai_label = Label(text =f"{self.level}", pos =[-320, 65])
 
-        self.add_widget(Label(text="--------------- Règles ----------------\nUn tour est décomposé en \ndeux parties : \n- Placer une bille sur une \ncase libre\n- Selectionner un plateau \n- Tourner le plateau de son \nchoix\nAlignez 5 billes de la même \ncouleur pour remporter la \nvictoire !", pos=[-315, -125]))
+        self.add_widget(Label(text="--------------- Règles ----------------\nEn mode solo : \nSelectionnez le niveau de l'IA avant\nde débuter la partie.\nEn mode duo : Amusez-vous contre\nvos amis\n\nLe jeu : \n- Placer une bille sur une case libre\n- Selectionner un plateau et tournez le\n Le but ? Alignez 5 billes de la même \ncouleur pour remporter la partie !", pos=[-315, -150]))
         self.add_widget(reset_game) 
         self.add_widget(mode_solo)
         self.add_widget(mode_duo)
-        self.add_widget(level_ai_more)
-        self.add_widget(level_ai_less)
-        self.add_widget(Label(text="Niveau de l'IA (1 à 6)", pos = [-315, 110]))
+        self.add_widget(self.level_ai_more)
+        self.add_widget(self.level_ai_less)
+        self.add_widget(Label(text="Niveau de l'IA (1 à 6) :", pos = [-315, 105]))
         self.add_widget(self.level_ai_label)
 
     def level_ia_add(self, instance):
@@ -68,7 +70,6 @@ class LoginScreen(FloatLayout):
         if self.level < 6:
             self.level += 1
             self.level_ai_label.text = str(self.level)
-            
     
     def level_ia_sub(self, instance):
         """
@@ -84,7 +85,8 @@ class LoginScreen(FloatLayout):
         if self.level > 1:
             self.level -= 1
             self.level_ai_label.text = str(self.level)
-    
+            print(self.level)
+
     def run_game(self, instance):
 
         """
@@ -100,6 +102,9 @@ class LoginScreen(FloatLayout):
         self.reset(instance)
         Player.player = 0
         self.board.able_boxes()
+        self.level_ai_more.disabled = True
+        self.level_ai_less.disabled = True
+
 
     def solo_mode_game(self, instance):
         """
@@ -145,6 +150,8 @@ class LoginScreen(FloatLayout):
         self.board.reset_board()
         self.bitboard_me = 0
         self.bitboard_opp = 0
+        self.level_ai_more.disabled = False
+        self.level_ai_less.disabled = False
 
     def apply_move(self, move):
         """
@@ -169,6 +176,7 @@ class LoginScreen(FloatLayout):
         if core.is_won(self.bitboard_me):
             sleep(2)
             self.board.win_game()
+            self.level_ai_more = True
             return 1
         
         if core.is_won(self.bitboard_opp):
@@ -196,22 +204,22 @@ class LoginScreen(FloatLayout):
         if self.single_player:
             if self.ai_to_play:
                 best = ai.get_best_move(self.bitboard_me, self.bitboard_opp, self.level)
-                #self.apply_move(best)
+                self.apply_move(best)
                 self.recursion = True
                 self.board.apply_move(best)
                 self.recursion = False
                 self.ai_to_play = False
             else:
-                #won = self.apply_move(self.board.move)
+                won = self.apply_move(self.board.move)
                 if not won:
                     self.ai_to_play = True
-                    #self.play()
+                    self.play()
         else:
-            pass
-            #self.apply_move(self.board.move)
+            self.apply_move(self.board.move)
 
 class Pytago(App):
     def build(self):
+        self.icon = "Image/marbles.png"
         return LoginScreen()
 
 Pytago().run()
