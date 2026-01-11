@@ -181,7 +181,6 @@ class LoginScreen(FloatLayout):
         if core.is_won(self.bitboard_me):
             sleep(2)
             self.board.win_game()
-            self.level_ai_more = True
             return 1
         
         if core.is_won(self.bitboard_opp):
