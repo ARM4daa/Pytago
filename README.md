@@ -18,5 +18,10 @@ For Android, run `buildozer android debug` in the root directory. The APK will b
 
 If you have ideas for releases in the future, it is a good idea to list them in the README.
 
-##To read the specifications technic
+## To read the specifications technic
+
 Open the index.html
+
+## Project members
+
+TyLion, ARM4da, Dragonite, HexIllusionist
