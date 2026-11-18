@@ -22,6 +22,6 @@ If you have ideas for releases in the future, it is a good idea to list them in 
 
 Open the index.html
 
-## Project members
+## Project members
 
 TyLion, ARM4da, Dragonite, HexIllusionist
